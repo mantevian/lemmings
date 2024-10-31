@@ -1,0 +1,13 @@
+@use "sass:math";
+
+$black: #17121C;
+
+@function px($pixels) {
+	@if math.is-unitless($pixels) {
+		@return math.div($pixels, 16) + rem;
+	}
+
+	@else {
+		@error "function px($pixels) only accepts unitless values"
+	}
+}
