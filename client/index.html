@@ -7,13 +7,168 @@
 	<title>Лемминги</title>
 
 	<link rel="stylesheet" href="./src/styles/style.scss" />
-	<script src="https://unpkg.com/htmx.org@2.0.1"></script>
-	<script src="./src/index.js" type="module"></script>
-	<script src="./src/elements/index.js" type="module"></script>
+
+	<script src="./src/js/index.js" type="module"></script>
+	<script src="./src/js/elements/index.js" type="module"></script>
 </head>
 
 <body>
-	
+	<lm-game scene="loading" style="display: none">
+		<lm-loading-scene>
+			<div>
+				<h1>Загрузка...</h1>
+			</div>
+		</lm-loading-scene>
+
+		<lm-login-scene>
+			<div>
+				<h1>Вход</h1>
+				
+				<form is="lm-form" action="auth">
+					<label>
+						<span>Логин</span>
+						<input type="text" name="lgn" minlength="4">
+					</label>
+					
+					<label>
+						<span>Пароль</span>
+						<input type="password" name="pwd" minlength="4">
+					</label>
+					
+					<input type="submit" value="Войти">
+				</form>
+				
+				<button>
+					<span>Нет аккаунта?</span>
+					<lm-event on="click" event="go-to-scene" data="register"></lm-event>
+				</button>
+			</div>
+		</lm-login-scene>
+
+		<lm-register-scene>
+			<div>
+				<h1>Регистрация</h1>
+				
+				<form is="lm-form" action="register">
+					<label>
+						<span>Логин</span>
+						<input type="text" name="lgn" minlength="4">
+					</label>
+					
+					<label>
+						<span>Пароль</span>
+						<input type="password" name="pwd" minlength="4">
+					</label>
+					
+					<input type="submit" value="Зарегистрироваться">
+				</form>
+				
+				<button>
+					<span>Уже есть аккаунт?</span>
+					<lm-event on="click" event="go-to-scene" data="login"></lm-event>
+				</button>
+			</div>
+		</lm-register-scene>
+
+		<lm-lobby-scene>
+			<div>
+				<h1>Лобби</h1>
+				
+				<button class="profile"></button>
+				
+				<div>
+					<div class="room-list">
+						<h2>Доступные комнаты</h2>
+						<ul></ul>
+					</div>
+
+					<div class="join-room">
+						<h2>Зайти в игру</h2>
+						<form is="lm-form" action="join-room">
+							<label>
+								<span>Код приглашения</span>
+								<input type="text" name="join-code">
+							</label>
+							<input type="submit" value="Зайти">
+						</form>
+					</div>
+
+					<div class="create-room">
+						<form is="lm-form" action="create-room">
+							<h2>Новая игра</h2>
+							<label>
+								<span>Количество игроков</span>
+								<input type="number" name="player-count">
+							</label>
+
+							<label>
+								<span>Длительность хода (секунд)</span>
+								<input type="number" name="turn-duration">
+							</label>
+
+							<label>
+								<span>Публичная комната</span>
+								<input type="checkbox" name="is-public">
+							</label>
+							<input type="submit" value="Создать">
+						</form>
+					</div>
+				</div>
+
+				<dialog id="room-dialog">
+					<h3>Ожидание...</h3>
+
+					<p>Игроков: <span class="player-count"></span></p>
+					<ul></ul>
+					<p>Когда присоединятся все игроки, любой из вас сможет начать игру</p>
+
+					<button>
+						<span>Выйти</span>
+						<lm-event on="click" event="quit-room"></lm-event>
+					</button>
+
+					<button>
+						<span>Начать</span>
+						<lm-event on="click" event="start-game"></lm-event>
+					</button>
+				</dialog>
+			</div>
+		</lm-lobby-scene>
+
+		<lm-game-scene>
+			<h1>Лемминги</h1>
+			
+			<ul id="field">
+				<li data-n="1" data-type="hole">
+
+				</li>
+
+				<li data-n="2" data-type="ground">
+
+				</li>
+
+				<li data-n="3" data-type="ground">
+
+				</li>
+
+				<li data-n="4" data-type="ground">
+
+				</li>
+
+				<li data-n="5" data-type="hill">
+
+				</li>
+
+				<li data-n="6" data-type="water">
+
+				</li>
+			</ul>
+
+			<ul id="deck">
+
+			</ul>
+		</lm-game-scene>
+	</lm-game>
 </body>
 
 </html>

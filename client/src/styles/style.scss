@@ -1,6 +1,66 @@
-body {
-	display: flex;
-	justify-content: center;
+@use './scene/login.scss';
+@use './scene/lobby.scss';
+@use './scene/loading.scss';
+@use './scene/game.scss';
 
-	padding: px(64) 0 px(128) 0;
+body {
+	display: block;
+
+	width: 100dvw;
+	height: 100dvh;
+
+	margin: 0;
+
+	background: black;
+
+	> lm-game {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+
+		display: block;
+		width: 1600px;
+		height: 900px;
+
+		transform-origin: center;
+		translate: -50% -50%;
+		
+		background: url("../../public/assets/background.svg");
+
+		> * {
+			display: block;
+
+			width: 100%;
+			height: 100%;
+
+			&:not([active]) {
+				display: none;
+				pointer-events: none;
+			}
+
+			&[active] {
+				z-index: 9999;
+			}
+		}
+
+		> lm-loading-scene {
+			@include loading.scene;
+		}
+
+		> lm-login-scene {
+			@include login.scene;
+		}
+
+		> lm-register-scene {
+			@include login.scene;
+		}
+
+		> lm-lobby-scene {
+			@include lobby.scene;
+		}
+
+		> lm-game-scene {
+			@include game.scene;
+		}
+	}
 }

@@ -1,0 +1,60 @@
+@mixin scene() {
+	& {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		flex-direction: column;
+
+		> ul#field {
+			display: flex;
+			gap: 32px;
+
+			> li {
+				width: 192px;
+				height: 192px;
+
+				&[data-type="hole"] {
+					background: #994311;
+				}
+
+				&[data-type="ground"] {
+					background: #1c9911;
+				}
+
+				&[data-type="hill"] {
+					background: #746b66;
+				}
+
+				&[data-type="water"] {
+					background: #116399;
+				}
+			}
+		}
+
+		> ul#deck {
+			display: flex;
+			gap: 32px;
+
+			> li {	
+				> lm-card {
+					display: block;
+
+					width: 90px;
+					height: 160px;
+					
+					background: white;
+					color: black;
+
+					cursor: pointer;
+
+					transition: translate 0.3s ease, scale 0.3s ease;
+
+					&:hover {
+						scale: 1.2;
+						translate: 0 -64px;
+					}
+				}
+			}
+		}
+	}
+}

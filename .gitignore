@@ -1,3 +1,6 @@
 ./lemmings
 client/node_modules
 client/dist
+lemmings.exe
+lemmings
+.env
