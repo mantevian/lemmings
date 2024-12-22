@@ -14,4 +14,9 @@ export default class SceneElement extends CustomElement {
 	close() {
 		
 	}
+
+	/** @returns {boolean} */
+	isOpen() {
+		return this.hasAttribute("active");
+	}
 }

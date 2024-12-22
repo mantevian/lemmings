@@ -24,7 +24,7 @@
 			<div>
 				<h1>Вход</h1>
 				
-				<form is="lm-form" action="auth">
+				<form is="lm-form" action="auth" event="ws">
 					<label>
 						<span>Логин</span>
 						<input type="text" name="lgn" minlength="4">
@@ -49,7 +49,7 @@
 			<div>
 				<h1>Регистрация</h1>
 				
-				<form is="lm-form" action="register">
+				<form is="lm-form" action="register" event="ws">
 					<label>
 						<span>Логин</span>
 						<input type="text" name="lgn" minlength="4">
@@ -84,7 +84,7 @@
 
 					<div class="join-room">
 						<h2>Зайти в игру</h2>
-						<form is="lm-form" action="join-room">
+						<form is="lm-form" action="join-room" event="ws">
 							<label>
 								<span>Код приглашения</span>
 								<input type="text" name="join-code">
@@ -94,7 +94,7 @@
 					</div>
 
 					<div class="create-room">
-						<form is="lm-form" action="create-room">
+						<form is="lm-form" action="create-room" event="ws">
 							<h2>Новая игра</h2>
 							<label>
 								<span>Количество игроков</span>
@@ -137,37 +137,207 @@
 
 		<lm-game-scene>
 			<h1>Лемминги</h1>
-			
-			<ul id="field">
-				<li data-n="1" data-type="hole">
 
-				</li>
+			<div id="timer">
+				<p></p>
+			</div>
 
-				<li data-n="2" data-type="ground">
+			<div id="turn-indicator">
+				<p></p>
+			</div>
 
-				</li>
+			<button>
+				<span>
+					NEXT TURNNNNNNN LETS GOOOOOO IT WORKS
+				</span>
 
-				<li data-n="3" data-type="ground">
+				<lm-event on="click" event="next-turn"></lm-event>
+			</button>
 
-				</li>
+			<div id="field">
+				<div id="lemmings">
+					
+				</div>
+				
+				<ul id="tiles">
+					<li data-n="1" data-type="hole">
+						
+					</li>
+					
+					<li data-n="2" data-type="ground">
+						
+					</li>
 
-				<li data-n="4" data-type="ground">
+					<li data-n="3" data-type="ground">
+						
+					</li>
+					
+					<li data-n="4" data-type="ground">
+						
+					</li>
+					
+					<li data-n="5" data-type="hill">
+						
+					</li>
+					
+					<li data-n="6" data-type="water">
+						
+					</li>
+				</ul>
+			</div>
 
-				</li>
+			<div id="hand">
+				<form is="lm-form" event="play-card" id="menu-container">
+					<button type="button" class="close">
+						<span>close</span>
+						<lm-event on="click" event="close-menu" />
+					</button>
 
-				<li data-n="5" data-type="hill">
+					<input type="hidden" name="card">
+					<input type="hidden" name="n">
 
-				</li>
+					<div id="menu-lemming-1">
+						<p class="title">Выберите&nbsp;лемминга</p>
 
-				<li data-n="6" data-type="water">
+						<fieldset>
+							<label>
+								<input type="radio" name="lemming-1" value="red">
+								<span>red</span>
+							</label>
+							
+							<label>
+								<input type="radio" name="lemming-1" value="yellow">
+								<span>yellow</span>
+							</label>
 
-				</li>
-			</ul>
+							<label>
+								<input type="radio" name="lemming-1" value="green">
+								<span>green</span>
+							</label>
 
-			<ul id="deck">
+							<label>
+								<input type="radio" name="lemming-1" value="blue">
+								<span>blue</span>
+							</label>
 
-			</ul>
+							<label>
+								<input type="radio" name="lemming-1" value="purple">
+								<span>purple</span>
+							</label>
+
+							<label>
+								<input type="radio" name="lemming-1" value="white">
+								<span>white</span>
+							</label>
+						</fieldset>
+					</div>
+
+					<div id="menu-lemming-2">
+						<p class="title">Выберите&nbsp;лемминга</p>
+
+						<fieldset>
+							<label>
+								<input type="radio" name="lemming-2" value="red">
+								<span>red</span>
+							</label>
+							
+							<label>
+								<input type="radio" name="lemming-2" value="yellow">
+								<span>yellow</span>
+							</label>
+
+							<label>
+								<input type="radio" name="lemming-2" value="green">
+								<span>green</span>
+							</label>
+
+							<label>
+								<input type="radio" name="lemming-2" value="blue">
+								<span>blue</span>
+							</label>
+
+							<label>
+								<input type="radio" name="lemming-2" value="purple">
+								<span>purple</span>
+							</label>
+
+							<label>
+								<input type="radio" name="lemming-2" value="white">
+								<span>white</span>
+							</label>
+						</fieldset>
+					</div>
+
+					<div id="menu-direction">
+						<p class="title">Выберите&nbsp;направление</p>
+
+						<fieldset>
+							<label>
+								<input type="radio" name="direction" value="left">
+								<span>left</span>
+							</label>
+
+							<label>
+								<input type="radio" name="direction" value="right">
+								<span>right</span>
+							</label>
+						</fieldset>
+					</div>
+
+					<div id="menu-tile">
+						<p class="title">Выберите&nbsp;поле</p>
+
+						<fieldset>
+							<label>
+								<input type="radio" name="tile" value="1">
+								<span>1</span>
+							</label>
+
+							<label>
+								<input type="radio" name="tile" value="2">
+								<span>2</span>
+							</label>
+
+							<label>
+								<input type="radio" name="tile" value="3">
+								<span>3</span>
+							</label>
+
+							<label>
+								<input type="radio" name="tile" value="4">
+								<span>4</span>
+							</label>
+
+							<label>
+								<input type="radio" name="tile" value="5">
+								<span>5</span>
+							</label>
+
+							<label>
+								<input type="radio" name="tile" value="6">
+								<span>6</span>
+							</label>
+						</fieldset>
+					</div>
+
+					<div id="menu-confirm">
+						<fieldset>
+							<input type="submit" value="Разыграть карту">
+						</fieldset>
+					</div>
+				</form>
+
+				<ul id="deck">
+	
+				</ul>
+			</div>
+				
 		</lm-game-scene>
+
+		<lm-error>
+			<p class="title">Ошибка</p>
+			<p class="description"></p>
+		</lm-error>
 	</lm-game>
 </body>
 

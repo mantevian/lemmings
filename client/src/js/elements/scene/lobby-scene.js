@@ -21,8 +21,24 @@ export default class LobbySceneElement extends SceneElement {
 			let data = e.detail;
 			let dialog = this.querySelector("dialog");
 			dialog.querySelector("span.player-count").innerHTML = `${data["players"].length} / ${data["max_player_count"]}`;
-			dialog.querySelector("ul").innerHTML = data["players"].map(p => `<li>${p.name}</li>`);
+			dialog.querySelector("ul").innerHTML = data["players"].map(p => `<li>${p.name}</li>`).join("");
 			dialog.showModal();
+		});
+
+		Game.on("incoming-game-state", e => {
+			if (!this.isOpen()) {
+				return;
+			}
+
+			let data = e.detail;
+			let dialog = this.querySelector("dialog");
+			dialog.querySelector("span.player-count").innerHTML = `${data["players"].length} / ${data["game"]["max_player_count"]}`;
+			dialog.querySelector("ul").innerHTML = data["players"].map(p => `<li>${p}</li>`).join("");
+			dialog.showModal();
+
+			if (data["game"]["current_turn_order"]) {
+				Game.emit("game-started");
+			}
 		});
 
 		Game.on("quit-room", () => {
@@ -43,6 +59,7 @@ export default class LobbySceneElement extends SceneElement {
 		Game.on("game-started", () => {
 			let dialog = this.querySelector("dialog");
 			dialog.close();
+			Game.goToScene("game");
 		});
 	}
 
@@ -54,7 +71,8 @@ export default class LobbySceneElement extends SceneElement {
 
 		this.roomListRefreshTimer = setInterval(() => {
 			Game.emit("ws", { event: "get-room-list" });
-		}, 5000);
+			Game.emit("ws", { event: "get-game-state" });
+		}, 1000);
 	}
 
 	close() {
@@ -64,7 +82,7 @@ export default class LobbySceneElement extends SceneElement {
 	updateList(state) {
 		let ul = this.querySelector("ul");
 
-		ul.innerHTML = state["rooms"].map(room => /*html*/`
+		ul.innerHTML = state["rooms"]?.map(room => /*html*/`
 			<li>
 				<button>
 					<span class="join-code">
@@ -82,6 +100,6 @@ export default class LobbySceneElement extends SceneElement {
 					<lm-event on="click" event="join-room" data="${room["join_code"]}" />
 				</button>
 			</li>
-		`).join("");
+		`).join("") || "";
 	}
 }

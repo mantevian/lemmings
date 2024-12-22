@@ -7,10 +7,16 @@ export default class CustomFormElement extends HTMLFormElement {
 		this.addEventListener("submit", e => {
 			e.preventDefault();
 
-			Game.emit("ws", {
-				event: this.getAttribute("action"),
-				data: new FormData(this)
-			});
+			let event = this.getAttribute("event");
+
+			if (event == "ws") {
+				Game.emit("ws", {
+					event: this.getAttribute("action"),
+					data: new FormData(this)
+				});
+			} else {
+				Game.emit(this.getAttribute("event"), Object.fromEntries(new FormData(this).entries()));
+			}
 		});
 	}
 }

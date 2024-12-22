@@ -5,53 +5,160 @@
 		justify-content: space-between;
 		flex-direction: column;
 
-		> ul#field {
+		padding: 32px;
+
+		#timer {
+			position: absolute;
+			top: 64px;
+			left: 64px;
+
 			display: flex;
-			gap: 32px;
+			justify-content: center;
+			align-items: center;
 
-			> li {
-				width: 192px;
-				height: 192px;
+			width: 96px;
+			height: 96px;
+			border-radius: 16px;
 
-				&[data-type="hole"] {
-					background: #994311;
+			background: rgba(0, 0, 0, 0.5);
+			color: white;
+
+			backdrop-filter: blur(4px);
+
+			> p {
+				font-size: 2em;
+			}
+		}
+
+		#field {
+			#lemmings {
+				position: relative;
+				width: 100%;
+				height: 200px;
+
+				> lm-lemming {
+					position: absolute;
+					display: block;
+					width: 192px;
+					height: 60px;
+
+					transition: translate 0.3s ease;
 				}
+			}
 
-				&[data-type="ground"] {
-					background: #1c9911;
-				}
+			#tiles {
+				display: flex;
+				gap: 32px;
+				width: fit-content;
 
-				&[data-type="hill"] {
-					background: #746b66;
-				}
+				> li {
+					width: 192px;
+					height: 192px;
 
-				&[data-type="water"] {
-					background: #116399;
+					&[data-type="hole"] {
+						background: #994311;
+					}
+
+					&[data-type="ground"] {
+						background: #1c9911;
+					}
+
+					&[data-type="hill"] {
+						background: #746b66;
+					}
+
+					&[data-type="water"] {
+						background: #116399;
+					}
 				}
 			}
 		}
 
-		> ul#deck {
-			display: flex;
-			gap: 32px;
+		#hand {
+			position: relative;
 
-			> li {	
-				> lm-card {
-					display: block;
+			#menu-container {
+				z-index: 999;
 
-					width: 90px;
-					height: 160px;
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				translate: -50% -100%;
+
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				gap: 16px;
+
+				padding: 32px;
+
+				border-radius: 16px;
+
+				background: rgba(0, 0, 0, 0.5);
+				color: white;
+
+				backdrop-filter: blur(4px);
+
+				&:not(.active) {
+					display: none;
+				}
+
+				> div {
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					align-items: center;
+
+					gap: 16px;
 					
-					background: white;
-					color: black;
+					padding: 16px;
 
-					cursor: pointer;
+					&:not(.active) {
+						display: none;
+					}
 
-					transition: translate 0.3s ease, scale 0.3s ease;
+					> p {
+						font-size: 2em;
+						margin: 0;
+					}
 
-					&:hover {
-						scale: 1.2;
-						translate: 0 -64px;
+					> fieldset {
+						display: flex;
+						justify-content: center;
+						gap: 16px;
+
+						> label {
+							&:not(.active) {
+								display: none;
+							}
+						}
+					}
+				}
+			}
+
+			#deck {
+				display: flex;
+				gap: 32px;
+
+				> li {
+					> lm-card {
+						display: block;
+
+						width: 90px;
+						height: 160px;
+
+						background: white;
+						color: black;
+
+						cursor: pointer;
+
+						transition: translate 0.3s ease, scale 0.3s ease;
+
+						&:hover {
+							scale: 1.2;
+							translate: 0 -64px;
+						}
 					}
 				}
 			}

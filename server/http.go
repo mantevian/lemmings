@@ -79,7 +79,9 @@ func StartHttpServer() {
 			cmd := input[1]
 			msg := input[2]
 
-			log.Printf("request: %s %s", cmd, msg)
+			if cmd != "get-game-state" && cmd != "get-room-list" {
+				log.Printf("request: %s %s", cmd, msg)
+			}
 
 			var data map[string]any
 
@@ -131,9 +133,41 @@ func StartHttpServer() {
 
 			case "next-turn":
 				output = NextTurn(token)
+
+			case "card-move":
+				pos, _ := strconv.Atoi(data["n"].(string))
+				output = CardMove(token, pos, data["direction"].(string))
+
+			case "card-jump":
+				pos, _ := strconv.Atoi(data["n"].(string))
+				tile, _ := strconv.Atoi(data["tile"].(string))
+				output = CardJump(token, pos, data["lemming-1"].(string), tile)
+
+			case "card-romeo":
+				pos, _ := strconv.Atoi(data["n"].(string))
+				tile, _ := strconv.Atoi(data["tile"].(string))
+				output = CardRomeo(token, pos, data["lemming-1"].(string), data["lemming-2"].(string), tile)
+
+			case "card-whoosh":
+				pos, _ := strconv.Atoi(data["n"].(string))
+				output = CardWhoosh(token, pos, data["lemming-1"].(string), data["lemming-2"].(string))
+
+			case "card-back":
+				pos, _ := strconv.Atoi(data["n"].(string))
+				output = CardBack(token, pos, data["lemming-1"].(string))
+
+			case "card-magic":
+				pos, _ := strconv.Atoi(data["n"].(string))
+				output = CardMagic(token, pos)
+
+			case "card-crash":
+				pos, _ := strconv.Atoi(data["n"].(string))
+				output = CardCrash(token, pos)
 			}
 
-			log.Printf("response: %s", output)
+			if cmd != "get-game-state" && cmd != "get-room-list" {
+				log.Printf("response: %s", output)
+			}
 
 			message = []byte(output)
 			err = conn.WriteMessage(messageType, message)

@@ -35,6 +35,10 @@ export default class GameElement extends CustomElement {
 			let cmd = e.data.split(" ")[0];
 			let data = JSON.parse(e.data.split(" ").slice(1).join(" ") || "{}");
 
+			if (!(["get-game-state", "get-room-list"].includes(cmd)) && data.result && data.result != "ok") {
+				this.querySelector("lm-error").setAttribute("type", data.result);
+			} 
+
 			switch (cmd) {
 				case "connected":
 					if (data.login) {
@@ -118,7 +122,11 @@ export default class GameElement extends CustomElement {
 
 	resize() {
 		let parent = this.parentElement.getBoundingClientRect();
-		this.style.scale = `${Math.min(parent.width / 1600, parent.height / 900) * 0.96}`;
+		let scale = Math.min(parent.width / 1600, parent.height / 900) * 0.96;
+		this.style.scale = scale;
+		document.querySelectorAll("dialog").forEach(dialog => {
+			dialog.style.scale = scale;
+		});
 	}
 
 	goToScene(sceneName) {
@@ -149,6 +157,7 @@ export default class GameElement extends CustomElement {
 
 	emit(type, detail) {
 		return this.dispatchEvent(new CustomEvent(type, { detail }));
+
 	}
 
 	getScene(sceneName) {

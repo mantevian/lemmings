@@ -24,10 +24,13 @@ body {
 
 		transform-origin: center;
 		translate: -50% -50%;
-		
+
 		background: url("../../public/assets/background.svg");
 
-		> * {
+		backface-visibility: hidden;
+		will-change: scale;
+
+		> *:not(lm-error) {
 			display: block;
 
 			width: 100%;
@@ -61,6 +64,42 @@ body {
 
 		> lm-game-scene {
 			@include game.scene;
+		}
+
+		> lm-error {
+			position: absolute;
+			top: 900px;
+			left: 16px;
+
+			display: flex !important;
+			flex-direction: column;
+			gap: 8px;
+
+			padding: 32px;
+			border-radius: 16px;
+
+			background: rgba(0, 0, 0, 0.5);
+			color: white;
+
+			backdrop-filter: blur(4px);
+
+			transition: translate 0.3s ease, opacity 0.3s ease;
+
+			> p {
+				margin: 0;
+			}
+
+			> p.title {
+				font-size: 2em;
+			}
+
+			&:not(.active) {
+				opacity: 0;
+			}
+
+			&.active {
+				translate: 0 calc(-100% - 16px);
+			}
 		}
 	}
 }

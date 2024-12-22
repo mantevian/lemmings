@@ -125,3 +125,45 @@ func NextTurn(token string) string {
 	j, _ := json.Marshal(res)
 	return "next-turn " + string(j)
 }
+
+func CardMove(token string, pos int, direction string) string {
+	res := sqlFunction("select card_move($1, $2, $3)", token, pos, direction)
+	j, _ := json.Marshal(res)
+	return "card-move " + string(j)
+}
+
+func CardJump(token string, pos int, color string, tile int) string {
+	res := sqlFunction("select card_jump($1, $2, $3, $4)", token, pos, color, tile)
+	j, _ := json.Marshal(res)
+	return "card-jump " + string(j)
+}
+
+func CardRomeo(token string, pos int, color1 string, color2 string, tile int) string {
+	res := sqlFunction("select card_romeo($1, $2, $3, $4, $5)", token, pos, color1, color2, tile)
+	j, _ := json.Marshal(res)
+	return "card-romeo " + string(j)
+}
+
+func CardWhoosh(token string, pos int, color1 string, color2 string) string {
+	res := sqlFunction("select card_whoosh($1, $2, $3, $4)", token, pos, color1, color2)
+	j, _ := json.Marshal(res)
+	return "card-whoosh " + string(j)
+}
+
+func CardBack(token string, pos int, color string) string {
+	res := sqlFunction("select card_back($1, $2, $3)", token, pos, color)
+	j, _ := json.Marshal(res)
+	return "card-back " + string(j)
+}
+
+func CardMagic(token string, pos int) string {
+	res := sqlFunction("select card_magic($1, $2)", token, pos)
+	j, _ := json.Marshal(res)
+	return "card-magic " + string(j)
+}
+
+func CardCrash(token string, pos int) string {
+	res := sqlFunction("select card_crash($1, $2)", token, pos)
+	j, _ := json.Marshal(res)
+	return "card-crash " + string(j)
+}
