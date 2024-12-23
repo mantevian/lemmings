@@ -22,16 +22,18 @@ func StartHttpServer() {
 		var token string
 		var login string
 
+		domain := os.Getenv("LEMMINGS_DOMAIN")
+
 		if err != nil {
 			token, _ = Connect("")
 		} else {
 			token, login = Connect(cookie.Value)
-			http.SetCookie(w, &http.Cookie{Name: "lemmings-login", Value: login, MaxAge: 3600 * 24 * 7, Domain: "localhost", Path: "/"})
+			http.SetCookie(w, &http.Cookie{Name: "lemmings-login", Value: login, MaxAge: 3600 * 24 * 7, Domain: domain, Path: "/"})
 		}
 
 		// if the token was empty/incorrect, we created a new one
 		// if the token was correct, this just updates the expiry date
-		http.SetCookie(w, &http.Cookie{Name: "lemmings-token", Value: token, MaxAge: 3600 * 24 * 7, Domain: "localhost", Path: "/"})
+		http.SetCookie(w, &http.Cookie{Name: "lemmings-token", Value: token, MaxAge: 3600 * 24 * 7, Domain: domain, Path: "/"})
 
 		http.ServeFile(w, r, "client/dist/index.html")
 	})
