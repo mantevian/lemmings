@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 
@@ -180,7 +181,8 @@ func StartHttpServer() {
 
 	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("client/dist/assets"))))
 
-	log.Println("Starting server on :8080")
-	err := http.ListenAndServe(":8080", nil)
+	port := os.Getenv("LEMMINGS_PORT")
+	log.Println("Starting server on port " + port)
+	err := http.ListenAndServe(":"+port, nil)
 	log.Fatal(err)
 }
