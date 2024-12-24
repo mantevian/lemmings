@@ -60,6 +60,12 @@ func Connect(token string) (tk string, lg string) {
 	return fmt.Sprintf("%s", res["token"]), fmt.Sprintf("%s", res["login"])
 }
 
+func GetMyLogin(token string) string {
+	res := sqlFunction("select get_my_login($1)", token)
+	j, _ := json.Marshal(res)
+	return "get-my-login " + string(j)
+}
+
 func Register(login string, password string, token string) string {
 	res := sqlFunction("select register($1, $2, $3)", login, password, token)
 	j, _ := json.Marshal(res)
@@ -70,6 +76,12 @@ func Auth(login string, password string, token string) string {
 	res := sqlFunction("select auth($1, $2, $3)", login, password, token)
 	j, _ := json.Marshal(res)
 	return "auth " + string(j)
+}
+
+func ChangePassword(login string, password string, newPassword, token string) string {
+	res := sqlFunction("select change_password($1, $2, $3, $4)", login, password, newPassword, token)
+	j, _ := json.Marshal(res)
+	return "change-password " + string(j)
 }
 
 func Logout(token string) string {

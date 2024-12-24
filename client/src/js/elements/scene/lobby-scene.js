@@ -65,18 +65,20 @@ export default class LobbySceneElement extends SceneElement {
 		Game.on("go-to-account", () => {
 			Game.goToScene("account");
 		});
+
+		Game.on("got-my-login", e => {
+			this.querySelector("button.profile > span").innerText = e.detail;
+		});
 	}
 
 	open() {
-		let profile = this.querySelector("button.profile > span");
-		profile.innerHTML = getCookie("lemmings-login");
+		Game.emit("ws", { event: "get-my-login" });
 
 		Game.emit("ws", { event: "get-room-list" });
 
 		this.roomListRefreshTimer = setInterval(() => {
 			Game.emit("ws", { event: "get-room-list" });
 			Game.emit("ws", { event: "get-game-state" });
-			profile.innerHTML = getCookie("lemmings-login");
 		}, 1000);
 	}
 

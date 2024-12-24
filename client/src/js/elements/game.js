@@ -60,19 +60,21 @@ export default class GameElement extends CustomElement {
 					}
 					break;
 
+				case "change-password":
+					if (data.result == "ok") {
+						this.goToScene("lobby");
+					}
+					break;
+
 				case "logout":
 					if (data.result == "ok") {
 						this.goToScene("login");
-						deleteCookie("lemmings-token");
-						deleteCookie("lemmings-login");
 					}
 					break;
 
 				case "logout-everywhere":
 					if (data.result == "ok") {
 						this.goToScene("login");
-						deleteCookie("lemmings-token");
-						deleteCookie("lemmings-login");
 					}
 					break;
 
@@ -100,6 +102,12 @@ export default class GameElement extends CustomElement {
 				case "get-game-state":
 					if (data.result == "ok") {
 						this.emit("incoming-game-state", data);
+					}
+					break;
+
+				case "get-my-login":
+					if (data.result == "ok") {
+						this.emit("got-my-login", data.login);
 					}
 					break;
 			}

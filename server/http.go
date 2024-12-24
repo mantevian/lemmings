@@ -43,15 +43,13 @@ func StartHttpServer() {
 
 		cookie, err := r.Cookie("lemmings-token")
 		var token string
-		var login string
 
 		domain := os.Getenv("LEMMINGS_DOMAIN")
 
 		if err != nil {
 			token, _ = Connect("")
 		} else {
-			token, login = Connect(cookie.Value)
-			http.SetCookie(w, &http.Cookie{Name: "lemmings-login", Value: login, MaxAge: 3600 * 24 * 7, Domain: domain, Path: "/"})
+			token, _ = Connect(cookie.Value)
 		}
 
 		// if the token was empty/incorrect, we created a new one
@@ -123,8 +121,14 @@ func StartHttpServer() {
 			case "register":
 				output = Register(ToStringOrEmpty(data["lgn"]), ToStringOrEmpty(data["pwd"]), token)
 
+			case "get-my-login":
+				output = GetMyLogin(token)
+
 			case "auth":
 				output = Auth(ToStringOrEmpty(data["lgn"]), ToStringOrEmpty(data["pwd"]), token)
+
+			case "change-password":
+				output = ChangePassword(ToStringOrEmpty(data["lgn"]), ToStringOrEmpty(data["pwd"]), ToStringOrEmpty(data["newpwd"]), token)
 
 			case "logout":
 				output = Logout(token)
