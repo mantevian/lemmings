@@ -62,7 +62,7 @@ export default class GameElement extends CustomElement {
 
 				case "change-password":
 					if (data.result == "ok") {
-						this.goToScene("lobby");
+						this.goToScene("login");
 					}
 					break;
 
@@ -138,7 +138,7 @@ export default class GameElement extends CustomElement {
 
 	resize() {
 		let parent = this.parentElement.getBoundingClientRect();
-		let scale = Math.min(parent.width / 1600, parent.height / 900) * 0.96;
+		let scale = Math.min(parent.width / 1600, parent.height / 900) * 0.98;
 		this.style.transform = `scale(${scale * 100}%)`;
 		
 		document.querySelectorAll("dialog").forEach(dialog => {
@@ -174,7 +174,6 @@ export default class GameElement extends CustomElement {
 
 	emit(type, detail) {
 		return this.dispatchEvent(new CustomEvent(type, { detail }));
-
 	}
 
 	getScene(sceneName) {

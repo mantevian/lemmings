@@ -20,26 +20,44 @@
 			background: rgba(8, 8, 8, 0.123);
 			border-radius: 32px;
 
-			color: white;
-
 			backdrop-filter: blur(8px);
+
+			color: white;
 
 			> button.lobby-button {
 				position: absolute;
 				top: 64px;
-				right: 64px;
+				left: 64px;
 			}
 
 			> div {
-				> form {
-					display: flex;
-					gap: 16px;
-					flex-direction: column;
+				display: grid;
+				grid-template-columns: 1fr 1fr 1fr;
+				gap: 96px;
 
-					> label {
+				> div {
+					> img,
+					> div {
+						margin-top: 32px;
+					}
+
+					> img.right {
+						float: right;
+					}
+
+					> img.mirror {
+						scale: -1 1;
+					}
+
+					> div.flex {
 						display: flex;
-						flex-direction: column;
 						gap: 8px;
+						align-items: center;
+						width: 100%;
+
+						> img {
+							width: 15%;
+						}
 					}
 				}
 			}

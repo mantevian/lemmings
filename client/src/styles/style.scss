@@ -3,6 +3,7 @@
 @use './scene/loading.scss';
 @use './scene/game.scss';
 @use './scene/account.scss';
+@use './scene/info.scss';
 
 body {
 	display: block;
@@ -68,6 +69,10 @@ body {
 
 		> lm-account-scene {
 			@include account.scene;
+		}
+
+		> lm-info-scene {
+			@include info.scene;
 		}
 
 		> lm-error {

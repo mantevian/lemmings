@@ -78,8 +78,8 @@ func Auth(login string, password string, token string) string {
 	return "auth " + string(j)
 }
 
-func ChangePassword(login string, password string, newPassword, token string) string {
-	res := sqlFunction("select change_password($1, $2, $3, $4)", login, password, newPassword, token)
+func ChangePassword(password string, newPassword, token string) string {
+	res := sqlFunction("select change_password($1, $2, $3)", password, newPassword, token)
 	j, _ := json.Marshal(res)
 	return "change-password " + string(j)
 }

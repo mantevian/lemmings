@@ -85,13 +85,15 @@ export default class GameSceneElement extends SceneElement {
 
 			let myTurnP = this.querySelector("#my-turn");
 			/** @type {HTMLButtonElement} */
-			let nextTurnButton = this.querySelector("#end-turn-button");
 			if (data.is_your_turn) {
 				myTurnP.innerText = "Сейчас ваш ход";
 			} else {
 				myTurnP.innerText = "Сейчас чужой ход";
 			}
-			nextTurnButton.disabled = !data.is_your_turn;
+
+			this.querySelectorAll(".disableable, input").forEach(e => {
+				e.disabled = !data.is_your_turn;
+			});
 
 			let myLemmingP = this.querySelector("#my-lemming");
 			const COLOR = {

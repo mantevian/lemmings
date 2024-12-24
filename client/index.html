@@ -79,6 +79,11 @@
 					<lm-event on="click" event="go-to-account"></lm-event>
 				</button>
 
+				<button class="info">
+					<span>Информация</span>
+					<lm-event on="click" event="go-to-info"></lm-event>
+				</button>
+
 				<div>
 					<div class="room-list">
 						<h2>Доступные комнаты</h2>
@@ -152,8 +157,74 @@
 					<span>Выйти со всех устройств</span>
 					<lm-event on="click" event="logout-everywhere"></lm-event>
 				</button>
+
+				<div>
+					<h2>Сменить пароль</h2>
+					<p>Данное действие разлогинит вас со всех устройств.</p>
+
+					<form is="lm-form" event="ws" action="change-password">
+						<label>
+							<span>Текущий пароль</span>
+							<input type="password" name="pwd" minlength="4" required>
+						</label>
+
+						<label>
+							<span>Новый пароль</span>
+							<input type="password" name="newpwd" minlength="4" required>
+						</label>
+
+						<input type="submit" value="Сменить пароль">
+					</form>
+				</div>
 			</div>
 		</lm-account-scene>
+
+		<lm-info-scene>
+			<div>
+				<h1>Лемминги</h1>
+				
+				<button class="lobby-button">
+					<span>В лобби</span>
+					<lm-event on="click" event="go-to-lobby"></lm-event>
+				</button>
+				
+				<h2>Добро пожаловать, <span class="my-name"></span>!</h2>
+
+				<div>
+					<div>
+						<h3>Лемминги — игра для 2–6 человек</h3>
+						<p>Каждый игрок отвечает за&nbsp;одного лемминга, но&nbsp;вы&nbsp;должны держать цвет вашего подопечного в&nbsp;секрете от&nbsp;других игроков. Используйте карты в&nbsp;вашей руке, чтобы отправить остальных леммингов купаться! Побеждает&nbsp;игрок, чей&nbsp;лемминг последним остался на&nbsp;земле.</p>
+						<p>Игровое поле состоит из&nbsp;6&nbsp;клеток&nbsp;—&nbsp;нора, три&nbsp;земли, скала&nbsp;и&nbsp;вода. Все&nbsp;лемминги начинают игру в&nbsp;норе и&nbsp;могут перемещаться по&nbsp;правилам, указанным на&nbsp;картах. Скалу можно обрушить специальной картой.</p>
+					
+						<img class="mirror" src="/assets/lemming-green.svg">
+					</div>
+
+					<div>
+						<h3>Расположение леммингов</h3>
+						<p>Обращайте внимание на&nbsp;расположение леммингов друг&nbsp;на&nbsp;друге. Оно имеет большое значение! Довольно часто лемминг будет передвигаться, таща&nbsp;за&nbsp;собой всех леммингов, которые&nbsp;на&nbsp;нём сидят.</p>
+						<p>Лемминги, находящиеся в&nbsp;воде, не&nbsp;сидят друг&nbsp;на&nbsp;друге, а&nbsp;значит, выходя&nbsp;из&nbsp;воды, лемминг&nbsp;не&nbsp;может перетащить с&nbsp;собой кого-либо&nbsp;ещё на&nbsp;землю.</p>
+
+						<div class="flex">
+							<img src="/assets/tile-hole.svg">
+							<img src="/assets/tile-land.svg">
+							<img src="/assets/tile-land.svg">
+							<img src="/assets/tile-land.svg">
+							<img src="/assets/tile-hill.svg">
+							<img src="/assets/tile-water.svg">
+						</div>
+					</div>
+					
+					<div>
+						<h3>Технические моменты</h3>
+						<p>Находясь в&nbsp;лобби, создайте&nbsp;комнату или&nbsp;присоединитесь к&nbsp;уже&nbsp;созданной. Затем саму игру может запустить любой участник, но&nbsp;только если&nbsp;в&nbsp;ней собралось ровно столько игроков, сколько было заявлено.</p>
+						<p>Игроки получают до&nbsp;трёх&nbsp;карт на&nbsp;руку каждый&nbsp;ход. Можно сыграть любое количество карт&nbsp;за&nbsp;ход, после чего следует нажать кнопку&nbsp;«Закончить&nbsp;ход».</p>
+						<p>Нажмите на&nbsp;карту, чтобы начать&nbsp;её&nbsp;разыгрывание. Вы&nbsp;сможете подробно ознакомиться с&nbsp;картой. Вам нужно будет выбрать параметры применения карты (если таковые имеются для&nbsp;конкретной карты) и&nbsp;подтвердить разыгрывание.</p>
+
+						<img class="right" src="/assets/lemming-red.svg">
+					</div>
+				</div>
+			</div>
+		</lm-info-scene>
 
 		<lm-game-scene>
 			<h1>Лемминги</h1>
@@ -327,14 +398,12 @@
 
 					<div id="menu-confirm">
 						<fieldset>
-							<input type="submit" value="Разыграть карту">
+							<input type="submit" value="Разыграть карту" class="disableable">
 
 							<button type="button" class="close">
 								<span>Отмена</span>
 								<lm-event on="click" event="close-menu" />
 							</button>
-
-
 						</fieldset>
 					</div>
 				</form>
@@ -356,7 +425,7 @@
 				<div id="turn-indicator">
 					<p>Ваш лемминг:&nbsp;<span id="my-lemming"></span></p>
 					<p id="my-turn"></p>
-					<button id="end-turn-button">
+					<button id="end-turn-button" class="disableable">
 						<span>
 							Закончить ход
 						</span>

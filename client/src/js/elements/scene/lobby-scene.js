@@ -20,8 +20,8 @@ export default class LobbySceneElement extends SceneElement {
 		Game.on("open-room-dialog", e => {
 			let data = e.detail;
 			let dialog = this.querySelector("dialog");
-			dialog.querySelector("span.player-count").innerHTML = `${data["players"].length} / ${data["max_player_count"]}`;
-			dialog.querySelector("ul").innerHTML = data["players"].map(p => `<li>${p.name}</li>`).join("");
+			dialog.querySelector("span.player-count").innerHTML = `${data.logins.length} / ${data["max_player_count"]}`;
+			dialog.querySelector("ul").innerHTML = data.logins.map(p => `<li>${p.name}</li>`).join("");
 			dialog.showModal();
 		});
 
@@ -32,8 +32,8 @@ export default class LobbySceneElement extends SceneElement {
 
 			let data = e.detail;
 			let dialog = this.querySelector("dialog");
-			dialog.querySelector("span.player-count").innerHTML = `${data["players"].length} / ${data["game"]["max_player_count"]}`;
-			dialog.querySelector("ul").innerHTML = data["players"].map(p => `<li>${p}</li>`).join("");
+			dialog.querySelector("span.player-count").innerHTML = `${data.logins.length} / ${data["game"]["max_player_count"]}`;
+			dialog.querySelector("ul").innerHTML = data.logins.map(p => `<li>${p}</li>`).join("");
 			dialog.showModal();
 
 			if (data["game"]["current_turn_order"]) {
@@ -64,6 +64,10 @@ export default class LobbySceneElement extends SceneElement {
 
 		Game.on("go-to-account", () => {
 			Game.goToScene("account");
+		});
+
+		Game.on("go-to-info", () => {
+			Game.goToScene("info");
 		});
 
 		Game.on("got-my-login", e => {

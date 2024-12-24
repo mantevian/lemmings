@@ -7,6 +7,7 @@ import LemmingElement from "./lemming";
 import SceneElement from "./scene";
 import AccountSceneElement from "./scene/account-scene";
 import GameSceneElement from "./scene/game-scene";
+import InfoSceneElement from "./scene/info-scene";
 import LoadingSceneElement from "./scene/loading-scene";
 import LobbySceneElement from "./scene/lobby-scene";
 import LoginSceneElement from "./scene/login-scene";
@@ -26,7 +27,8 @@ const elements = {
 	"lobby-scene": LobbySceneElement,
 	"loading-scene": LoadingSceneElement,
 	"game-scene": GameSceneElement,
-	"account-scene": AccountSceneElement
+	"account-scene": AccountSceneElement,
+	"info-scene": InfoSceneElement
 };
 
 for (let e of Object.entries(elements)) {

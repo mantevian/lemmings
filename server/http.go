@@ -128,7 +128,7 @@ func StartHttpServer() {
 				output = Auth(ToStringOrEmpty(data["lgn"]), ToStringOrEmpty(data["pwd"]), token)
 
 			case "change-password":
-				output = ChangePassword(ToStringOrEmpty(data["lgn"]), ToStringOrEmpty(data["pwd"]), ToStringOrEmpty(data["newpwd"]), token)
+				output = ChangePassword(ToStringOrEmpty(data["pwd"]), ToStringOrEmpty(data["newpwd"]), token)
 
 			case "logout":
 				output = Logout(token)
