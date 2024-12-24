@@ -123,9 +123,10 @@ export default class GameElement extends CustomElement {
 	resize() {
 		let parent = this.parentElement.getBoundingClientRect();
 		let scale = Math.min(parent.width / 1600, parent.height / 900) * 0.96;
-		this.style.scale = scale;
+		this.style.transform = `scale(${scale * 100}%)`;
+		
 		document.querySelectorAll("dialog").forEach(dialog => {
-			dialog.style.scale = scale;
+			dialog.style.transform = `scale(${scale * 100}%)`;
 		});
 	}
 

@@ -90,8 +90,8 @@ func GetRoomList(token string) string {
 	return "get-room-list " + string(j)
 }
 
-func CreateRoom(turnDuration int, playerCount int, isPublic bool, token string) string {
-	res := sqlFunction("select create_room($1, $2, $3, $4)", turnDuration, playerCount, isPublic, token)
+func CreateRoom(turnDuration int, playerCount int, token string) string {
+	res := sqlFunction("select create_room($1, $2, $3)", turnDuration, playerCount, token)
 	j, _ := json.Marshal(res)
 	return "create-room " + string(j)
 }

@@ -28,7 +28,6 @@ body {
 		background: url("../../public/assets/background.svg");
 
 		backface-visibility: hidden;
-		will-change: scale;
 
 		> *:not(lm-error) {
 			display: block;
@@ -68,6 +67,7 @@ body {
 
 		> lm-error {
 			position: absolute;
+			z-index: 99999999;
 			top: 900px;
 			left: 16px;
 

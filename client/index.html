@@ -23,21 +23,21 @@
 		<lm-login-scene>
 			<div>
 				<h1>Вход</h1>
-				
+
 				<form is="lm-form" action="auth" event="ws">
 					<label>
 						<span>Логин</span>
-						<input type="text" name="lgn" minlength="4">
+						<input type="text" name="lgn" minlength="4" required>
 					</label>
-					
+
 					<label>
 						<span>Пароль</span>
-						<input type="password" name="pwd" minlength="4">
+						<input type="password" name="pwd" minlength="4" required>
 					</label>
-					
+
 					<input type="submit" value="Войти">
 				</form>
-				
+
 				<button>
 					<span>Нет аккаунта?</span>
 					<lm-event on="click" event="go-to-scene" data="register"></lm-event>
@@ -48,21 +48,21 @@
 		<lm-register-scene>
 			<div>
 				<h1>Регистрация</h1>
-				
+
 				<form is="lm-form" action="register" event="ws">
 					<label>
 						<span>Логин</span>
-						<input type="text" name="lgn" minlength="4">
+						<input type="text" name="lgn" minlength="4" required>
 					</label>
-					
+
 					<label>
 						<span>Пароль</span>
-						<input type="password" name="pwd" minlength="4">
+						<input type="password" name="pwd" minlength="4" required>
 					</label>
-					
+
 					<input type="submit" value="Зарегистрироваться">
 				</form>
-				
+
 				<button>
 					<span>Уже есть аккаунт?</span>
 					<lm-event on="click" event="go-to-scene" data="login"></lm-event>
@@ -73,9 +73,9 @@
 		<lm-lobby-scene>
 			<div>
 				<h1>Лобби</h1>
-				
+
 				<button class="profile"></button>
-				
+
 				<div>
 					<div class="room-list">
 						<h2>Доступные комнаты</h2>
@@ -87,7 +87,7 @@
 						<form is="lm-form" action="join-room" event="ws">
 							<label>
 								<span>Код приглашения</span>
-								<input type="text" name="join-code">
+								<input type="text" name="join-code" required>
 							</label>
 							<input type="submit" value="Зайти">
 						</form>
@@ -98,18 +98,14 @@
 							<h2>Новая игра</h2>
 							<label>
 								<span>Количество игроков</span>
-								<input type="number" name="player-count">
+								<input type="number" name="player-count" required>
 							</label>
 
 							<label>
 								<span>Длительность хода (секунд)</span>
-								<input type="number" name="turn-duration">
+								<input type="number" name="turn-duration" required>
 							</label>
 
-							<label>
-								<span>Публичная комната</span>
-								<input type="checkbox" name="is-public">
-							</label>
 							<input type="submit" value="Создать">
 						</form>
 					</div>
@@ -142,46 +138,34 @@
 				<p></p>
 			</div>
 
-			<div id="turn-indicator">
-				<p></p>
-			</div>
-
-			<button>
-				<span>
-					NEXT TURNNNNNNN LETS GOOOOOO IT WORKS
-				</span>
-
-				<lm-event on="click" event="next-turn"></lm-event>
-			</button>
-
 			<div id="field">
 				<div id="lemmings">
-					
+
 				</div>
-				
+
 				<ul id="tiles">
 					<li data-n="1" data-type="hole">
-						
+
 					</li>
-					
+
 					<li data-n="2" data-type="ground">
-						
+
 					</li>
 
 					<li data-n="3" data-type="ground">
-						
+
 					</li>
-					
+
 					<li data-n="4" data-type="ground">
-						
+
 					</li>
-					
+
 					<li data-n="5" data-type="hill">
-						
+
 					</li>
-					
+
 					<li data-n="6" data-type="water">
-						
+
 					</li>
 				</ul>
 			</div>
@@ -190,8 +174,8 @@
 				<form is="lm-form" event="play-card" id="menu-container">
 					<h2>Разыгрывание карты</h2>
 
-					<input type="hidden" name="card">
-					<input type="hidden" name="n">
+					<input type="hidden" name="card" required>
+					<input type="hidden" name="n" required>
 
 					<div id="menu-lemming-1">
 						<p class="title">Выберите&nbsp;лемминга</p>
@@ -201,7 +185,7 @@
 								<input type="radio" name="lemming-1" value="red">
 								<span>red</span>
 							</label>
-							
+
 							<label>
 								<input type="radio" name="lemming-1" value="yellow">
 								<span>yellow</span>
@@ -237,7 +221,7 @@
 								<input type="radio" name="lemming-2" value="red">
 								<span>red</span>
 							</label>
-							
+
 							<label>
 								<input type="radio" name="lemming-2" value="yellow">
 								<span>yellow</span>
@@ -269,12 +253,12 @@
 						<p class="title">Выберите&nbsp;направление</p>
 
 						<fieldset>
-							<label>
+							<label class="active">
 								<input type="radio" name="direction" value="left">
 								<span>left</span>
 							</label>
 
-							<label>
+							<label class="active">
 								<input type="radio" name="direction" value="right">
 								<span>right</span>
 							</label>
@@ -326,20 +310,55 @@
 								<lm-event on="click" event="close-menu" />
 							</button>
 
-							
+
 						</fieldset>
 					</div>
 				</form>
 
 				<ul id="deck">
-	
+
 				</ul>
+
+				<div id="player-list">
+					<h2>Игроки</h2>
+					<p data-n="0">-</p>
+					<p data-n="1">-</p>
+					<p data-n="2">-</p>
+					<p data-n="3">-</p>
+					<p data-n="4">-</p>
+					<p data-n="5">-</p>
+				</div>
+
+				<div id="turn-indicator">
+					<p>Ваш лемминг:&nbsp;<span id="my-lemming"></span></p>
+					<p id="my-turn"></p>
+					<button id="end-turn-button">
+						<span>
+							Закончить ход
+						</span>
+
+						<lm-event on="click" event="next-turn"></lm-event>
+					</button>
+				</div>
 			</div>
-				
+
+			<div id="winner">
+				<h2>Есть победитель!</h2>
+				<p>Этот игрок последним остался на суше:</p>
+				<p id="winner-name">-</p>
+
+				<button>
+					<span>Ура!</span>
+
+					<lm-event on="click" event="go-to-lobby"></lm-event>
+					<lm-event on="click" event="quit-room"></lm-event>
+				</button>
+			</div>
+
 		</lm-game-scene>
 
 		<lm-error>
-			<p class="title"></p>
+			<p class="title">Ошибка</p>
 			<p class="description"></p>
 		</lm-error>
 	</lm-game>

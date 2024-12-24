@@ -2,7 +2,7 @@ import { Game } from "../../index.js";
 import SceneElement from "../scene.js";
 
 export default class GameSceneElement extends SceneElement {
-	static observedAttributes = ["has-hill-crashed"];
+	static observedAttributes = ["has-hill-crashed", "hill-crash-finished"];
 
 	/** @type {number} */
 	timer;
@@ -13,14 +13,25 @@ export default class GameSceneElement extends SceneElement {
 	/** @type {string[]} */
 	lemmings = [];
 
+	finished = false;
+
 	connectedCallback() {
 		Game.on("game-started", () => {
 			this.tick();
 			this.timer = setInterval(this.tick, 1000);
+
+			this.removeAttribute("has-hill-crashed");
+			this.removeAttribute("hill-crash-finished");
+
+			this.querySelector("li[data-type='hill']").classList.remove("crashing", "crashed");
+			
+			this.hand = [];
+			this.lemmings = [];
+			this.finished = false;
 		});
 
 		Game.on("incoming-game-state", e => {
-			if (!this.isOpen()) {
+			if (!this.isOpen() || this.finished) {
 				return;
 			}
 
@@ -72,12 +83,27 @@ export default class GameSceneElement extends SceneElement {
 			let timerP = this.querySelector("#timer > p");
 			timerP.innerText = Math.floor((turnStarted + turnDuration - now) / 1000);
 
-			let turnIndicator = this.querySelector("#turn-indicator");
+			let myTurnP = this.querySelector("#my-turn");
+			/** @type {HTMLButtonElement} */
+			let nextTurnButton = this.querySelector("#end-turn-button");
 			if (data.is_your_turn) {
-				turnIndicator.innerText = "THIS IS YOUR TURN!!!!!! GOOOOOOOOO";
+				myTurnP.innerText = "Сейчас ваш ход";
 			} else {
-				turnIndicator.innerText = "NOT YOUR TURN HOLD UP!!!!!!!";
+				myTurnP.innerText = "Сейчас чужой ход";
 			}
+			nextTurnButton.disabled = !data.is_your_turn;
+
+			let myLemmingP = this.querySelector("#my-lemming");
+			const COLOR = {
+				"red": "красный",
+				"yellow": "жёлтый",
+				"green": "зелёный",
+				"blue": "синий",
+				"purple": "фиолетовый",
+				"white": "белый"
+			};
+			myLemmingP.innerText = COLOR[data.role];
+			myLemmingP.style.color = data.role;
 
 			this.lemmings = data.lemmings;
 
@@ -86,13 +112,26 @@ export default class GameSceneElement extends SceneElement {
 				let hill = this.querySelector("li[data-type='hill']");
 				hill.classList.add("crashing");
 				setTimeout(() => {
-					hill.style.display = "none";
+					hill.classList.add("crashed");
 				}, 2000);
 
 				let water = this.querySelector("li[data-type='water']");
 				water.setAttribute("data-n", "5");
 
 				this.setAttribute("hill-crash-finished", "true");
+			}
+
+			let players = data.players;
+			for (let i = 0; i < players.length; i++) {
+				let p = this.querySelector(`#player-list > p[data-n="${i}"]`);
+				p.innerText = players[i];
+				p.setAttribute("data-current", i == parseInt(data.game.current_turn_order) - 1);
+			}
+
+			if (data.game.winner) {
+				Game.emit("got-winner", {
+					name: data.game.winner
+				});
 			}
 		});
 
@@ -171,41 +210,38 @@ export default class GameSceneElement extends SceneElement {
 			form.querySelector("input[name='card']").value = type;
 			form.querySelector("input[name='n']").value = n;
 
-			this.querySelectorAll("#menu-lemming-1 label, #menu-lemming-2 label").forEach(l => {
+			this.querySelectorAll("#menu-lemming-1 label").forEach(l => {
 				let value = l.querySelector("input").getAttribute("value");
-				if (this.lemmings.find(lem => lem.color == value)) {
+				if (menus.includes("menu-lemming-1") && this.lemmings.find(lem => lem.color == value)) {
 					l.classList.add("active");
+					l.querySelector("input").required = true;
 				} else {
 					l.classList.remove("active");
+					l.querySelector("input").required = false;
+				}
+			});
+
+			this.querySelectorAll("#menu-lemming-2 label").forEach(l => {
+				let value = l.querySelector("input").getAttribute("value");
+				if (menus.includes("menu-lemming-2") && this.lemmings.find(lem => lem.color == value)) {
+					l.classList.add("active");
+					l.querySelector("input").required = true;
+				} else {
+					l.classList.remove("active");
+					l.querySelector("input").required = false;
 				}
 			});
 
 			this.querySelectorAll("#menu-tile label").forEach(l => {
 				let value = l.querySelector("input").getAttribute("value");
-				if (allowedTiles.includes(parseInt(value))) {
+				if (menus.includes("menu-tile") && allowedTiles.includes(parseInt(value))) {
 					l.classList.add("active");
+					l.querySelector("input").required = true;
 				} else {
 					l.classList.remove("active");
+					l.querySelector("input").required = false;
 				}
 			});
-
-			if (n != 1) {
-				this.querySelector("#menu-direction label:has(input[value='left']").classList.add("active");
-			}
-
-			if (hasHillCrashed) {
-				if (n == 5) {
-					this.querySelector("#menu-direction label:has(input[value='right']").classList.remove("active");
-				} else {
-					this.querySelector("#menu-direction label:has(input[value='right']").classList.add("active");
-				}
-			} else {
-				if (n == 6) {
-					this.querySelector("#menu-direction label:has(input[value='right']").classList.remove("active");
-				} else {
-					this.querySelector("#menu-direction label:has(input[value='right']").classList.add("active");
-				}
-			}
 
 			if (hasHillCrashed) {
 				this.querySelector("input[name='tile'][value='5']").setAttribute("data-type", "water");
@@ -220,6 +256,10 @@ export default class GameSceneElement extends SceneElement {
 				} else {
 					menu.classList.remove("active");
 				}
+			});
+
+			this.querySelectorAll("input[name='direction']").forEach(e => {
+				e.required = menus.includes("menu-direction");
 			});
 
 			form.classList.add("active");
@@ -303,6 +343,19 @@ export default class GameSceneElement extends SceneElement {
 			Game.emit("ws", {
 				event: "next-turn"
 			});
+		});
+
+		Game.on("got-winner", e => {
+			let name = e.detail.name;
+			this.finished = true;
+
+			this.querySelector("#winner").classList.add("active");
+			this.querySelector("#winner-name").innerText = name;
+		});
+
+		Game.on("go-to-lobby", () => {
+			Game.goToScene("lobby");
+			this.querySelector("#winner").classList.remove("active");
 		});
 	}
 

@@ -133,7 +133,7 @@ func StartHttpServer() {
 				output = LogoutEverywhere(token)
 
 			case "create-room":
-				output = CreateRoom(ToIntOrNegativeOne(data["turn-duration"]), ToIntOrNegativeOne(data["player-count"]), ToBool(data["is-public"]), token)
+				output = CreateRoom(ToIntOrNegativeOne(data["turn-duration"]), ToIntOrNegativeOne(data["player-count"]), token)
 
 			case "get-room-list":
 				output = GetRoomList(token)
