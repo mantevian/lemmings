@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="171.1731"
+   height="107.6731"
+   viewBox="0 0 45.289546 28.488507"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4-beta3 (01c8a1c, 2024-08-28, custom)"
+   sodipodi:docname="lemmings-assets.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#282828"
+     inkscape:document-units="px"
+     inkscape:zoom="0.72337262"
+     inkscape:cx="1325.0432"
+     inkscape:cy="2488.3441"
+     inkscape:window-width="1920"
+     inkscape:window-height="1014"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g82">
+    <inkscape:page
+       x="0"
+       y="0"
+       width="45.289547"
+       height="28.488506"
+       id="page2"
+       margin="0"
+       bleed="0" />
+  </sodipodi:namedview>
+  <defs
+     id="defs1">
+    <linearGradient
+       id="swatch12"
+       inkscape:swatch="solid">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop12" />
+    </linearGradient>
+  </defs>
+  <g
+     id="g73"
+     inkscape:label="tile6"
+     transform="translate(-536.72872,-550.05376)">
+    <path
+       style="opacity:0.314159;fill:#87e5ba;fill-opacity:1;stroke:none;stroke-width:0.0456908;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+       d="m 537.81503,577.79019 18.80101,-0.91916 18.63385,1.6712 6.76836,-0.66848 -0.6267,-20.29964 -1.67118,-4.55402 -23.85641,-2.96638 -15.29146,3.42596 -3.59308,2.84103 -0.25068,12.86824 z"
+       id="path3-12-8"
+       sodipodi:nodetypes="ccccccccccc" />
+  </g>
+</svg>

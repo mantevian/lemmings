@@ -14,6 +14,29 @@ import (
 
 var upgrader = websocket.Upgrader{}
 
+func ToStringOrEmpty(input any) string {
+	if input == nil {
+		return ""
+	}
+	return input.(string)
+}
+
+func ToIntOrNegativeOne(input any) int {
+	if input == nil {
+		return -1
+	}
+	res, err := strconv.Atoi(input.(string))
+	if err != nil {
+		return -1
+	}
+	return res
+}
+
+func ToBool(input any) bool {
+	str := ToStringOrEmpty(input)
+	return str == "on"
+}
+
 func StartHttpServer() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/html")
@@ -98,10 +121,10 @@ func StartHttpServer() {
 
 			switch cmd {
 			case "register":
-				output = Register(data["lgn"].(string), data["pwd"].(string), token)
+				output = Register(ToStringOrEmpty(data["lgn"]), ToStringOrEmpty(data["pwd"]), token)
 
 			case "auth":
-				output = Auth(data["lgn"].(string), data["pwd"].(string), token)
+				output = Auth(ToStringOrEmpty(data["lgn"]), ToStringOrEmpty(data["pwd"]), token)
 
 			case "logout":
 				output = Logout(token)
@@ -110,20 +133,13 @@ func StartHttpServer() {
 				output = LogoutEverywhere(token)
 
 			case "create-room":
-				turnDuration, _ := strconv.Atoi(data["turn-duration"].(string))
-				playerCount, _ := strconv.Atoi(data["player-count"].(string))
-				isPublicStr := data["is-public"].(string)
-				isPublic := false
-				if isPublicStr == "on" {
-					isPublic = true
-				}
-				output = CreateRoom(turnDuration, playerCount, isPublic, token)
+				output = CreateRoom(ToIntOrNegativeOne(data["turn-duration"]), ToIntOrNegativeOne(data["player-count"]), ToBool(data["is-public"]), token)
 
 			case "get-room-list":
 				output = GetRoomList(token)
 
 			case "join-room":
-				output = JoinRoom(data["join-code"].(string), token)
+				output = JoinRoom(ToStringOrEmpty(data["join-code"]), token)
 
 			case "quit-room":
 				output = QuitRoom(token)
@@ -138,34 +154,25 @@ func StartHttpServer() {
 				output = NextTurn(token)
 
 			case "card-move":
-				pos, _ := strconv.Atoi(data["n"].(string))
-				output = CardMove(token, pos, data["direction"].(string))
+				output = CardMove(token, ToIntOrNegativeOne(data["n"]), ToStringOrEmpty(data["direction"]))
 
 			case "card-jump":
-				pos, _ := strconv.Atoi(data["n"].(string))
-				tile, _ := strconv.Atoi(data["tile"].(string))
-				output = CardJump(token, pos, data["lemming-1"].(string), tile)
+				output = CardJump(token, ToIntOrNegativeOne(data["n"]), ToStringOrEmpty(data["lemming-1"]), ToIntOrNegativeOne(data["tile"]))
 
 			case "card-romeo":
-				pos, _ := strconv.Atoi(data["n"].(string))
-				tile, _ := strconv.Atoi(data["tile"].(string))
-				output = CardRomeo(token, pos, data["lemming-1"].(string), data["lemming-2"].(string), tile)
+				output = CardRomeo(token, ToIntOrNegativeOne(data["n"]), ToStringOrEmpty(data["lemming-1"]), ToStringOrEmpty(data["lemming-2"]), ToIntOrNegativeOne(data["tile"]))
 
 			case "card-whoosh":
-				pos, _ := strconv.Atoi(data["n"].(string))
-				output = CardWhoosh(token, pos, data["lemming-1"].(string), data["lemming-2"].(string))
+				output = CardWhoosh(token, ToIntOrNegativeOne(data["n"]), ToStringOrEmpty(data["lemming-1"]), ToStringOrEmpty(data["lemming-2"]))
 
 			case "card-back":
-				pos, _ := strconv.Atoi(data["n"].(string))
-				output = CardBack(token, pos, data["lemming-1"].(string))
+				output = CardBack(token, ToIntOrNegativeOne(data["n"]), ToStringOrEmpty(data["lemming-1"]))
 
 			case "card-magic":
-				pos, _ := strconv.Atoi(data["n"].(string))
-				output = CardMagic(token, pos)
+				output = CardMagic(token, ToIntOrNegativeOne(data["n"]))
 
 			case "card-crash":
-				pos, _ := strconv.Atoi(data["n"].(string))
-				output = CardCrash(token, pos)
+				output = CardCrash(token, ToIntOrNegativeOne(data["n"]))
 			}
 
 			if cmd != "get-game-state" && cmd != "get-room-list" {

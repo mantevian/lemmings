@@ -8,6 +8,8 @@
 		padding: 32px;
 
 		#timer {
+			z-index: 9999999;
+
 			position: absolute;
 			top: 64px;
 			left: 64px;
@@ -31,18 +33,86 @@
 		}
 
 		#field {
+			background-image: url("/assets/water.svg");
+			background-position: center;
+			background-repeat: no-repeat;
+			background-size: contain;
+
+			height: 600px;
+			padding: 0 96px;
+
 			#lemmings {
 				position: relative;
 				width: 100%;
-				height: 200px;
+				height: 80px;
+
+				margin-top: 30px;
 
 				> lm-lemming {
 					position: absolute;
 					display: block;
 					width: 192px;
-					height: 60px;
+					height: 100px;
 
 					transition: translate 0.3s ease;
+
+					background-position: center;
+					background-repeat: no-repeat;
+					background-size: contain;
+
+					&[color="red"] {
+						filter: drop-shadow(1px 0px 0px rgb(255, 128, 128)) drop-shadow(-1px 0px 0px rgb(255, 128, 128)) drop-shadow(0px 1px 0px rgb(255, 128, 128)) drop-shadow(0px -1px 0px rgb(255, 128, 128)) drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.3));
+						background-image: url("/assets/lemming-red.svg");
+					}
+
+					&[color="yellow"] {
+						filter: drop-shadow(1px 0px 0px rgb(255, 255, 128)) drop-shadow(-1px 0px 0px rgb(255, 255, 128)) drop-shadow(0px 1px 0px rgb(255, 255, 128)) drop-shadow(0px -1px 0px rgb(255, 255, 128)) drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.3));
+						background-image: url("/assets/lemming-yellow.svg");
+					}
+
+					&[color="green"] {
+						filter: drop-shadow(1px 0px 0px rgb(128, 255, 128)) drop-shadow(-1px 0px 0px rgb(128, 255, 128)) drop-shadow(0px 1px 0px rgb(128, 255, 128)) drop-shadow(0px -1px 0px rgb(128, 255, 128)) drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.3));
+						background-image: url("/assets/lemming-green.svg");
+					}
+
+					&[color="blue"] {
+						filter: drop-shadow(1px 0px 0px rgb(128, 128, 255)) drop-shadow(-1px 0px 0px rgb(128, 128, 255)) drop-shadow(0px 1px 0px rgb(128, 128, 255)) drop-shadow(0px -1px 0px rgb(128, 128, 255)) drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.3));
+						background-image: url("/assets/lemming-blue.svg");
+					}
+					
+					&[color="purple"] {
+						filter: drop-shadow(1px 0px 0px rgb(255, 128, 255)) drop-shadow(-1px 0px 0px rgb(255, 128, 255)) drop-shadow(0px 1px 0px rgb(255, 128, 255)) drop-shadow(0px -1px 0px rgb(255, 128, 255)) drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.3));
+						background-image: url("/assets/lemming-purple.svg");
+					}
+
+					&[color="white"] {
+						filter: drop-shadow(1px 0px 0px rgb(255, 255, 255)) drop-shadow(-1px 0px 0px rgb(255, 255, 255)) drop-shadow(0px 1px 0px rgb(255, 255, 255)) drop-shadow(0px -1px 0px rgb(255, 255, 255)) drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.3));
+						background-image: url("/assets/lemming-white.svg");
+					}
+
+					&[pos="1"] {
+						z-index: 101;
+					}
+
+					&[pos="2"] {
+						z-index: 102;
+					}
+
+					&[pos="3"] {
+						z-index: 103;
+					}
+
+					&[pos="4"] {
+						z-index: 104;
+					}
+
+					&[pos="5"] {
+						z-index: 105;
+					}
+
+					&[pos="6"] {
+						z-index: 106;
+					}
 				}
 			}
 
@@ -51,24 +121,39 @@
 				gap: 32px;
 				width: fit-content;
 
+				width: 100%;
+				height: 192px;
+
 				> li {
 					width: 192px;
 					height: 192px;
 
+					background-position: center;
+					background-repeat: no-repeat;
+					background-size: contain;
+
 					&[data-type="hole"] {
-						background: #994311;
+						background-image: url("/assets/tile-hole.svg");
 					}
 
 					&[data-type="ground"] {
-						background: #1c9911;
+						background-image: url("/assets/tile-land.svg");
 					}
 
 					&[data-type="hill"] {
-						background: #746b66;
+						background-image: url("/assets/tile-hill.svg");
 					}
 
 					&[data-type="water"] {
-						background: #116399;
+						background-image: url("/assets/tile-water.svg");
+					}
+
+					transition: translate 2s ease, scale 2s ease, opacity 2s ease;
+
+					&.crashing {
+						translate: 0 200px;
+						scale: 0.01;
+						opacity: 0;
 					}
 				}
 			}
@@ -83,7 +168,10 @@
 				position: absolute;
 				top: 50%;
 				left: 50%;
-				translate: -50% -100%;
+				translate: -50% -720px;
+				
+				width: 1200px;
+				height: 800px;
 
 				display: flex;
 				flex-direction: column;
@@ -92,6 +180,7 @@
 				gap: 16px;
 
 				padding: 32px;
+				padding-left: 460px;
 
 				border-radius: 16px;
 
@@ -111,7 +200,7 @@
 					align-items: center;
 
 					gap: 16px;
-					
+
 					padding: 16px;
 
 					&:not(.active) {
@@ -128,8 +217,73 @@
 						justify-content: center;
 						gap: 16px;
 
+						border: none;
+						padding: 0;
+						margin: 0;
+
 						> label {
+							display: block;
+							width: 64px;
+							height: 64px;
+
+							background-position: center;
+							background-size: contain;
+							background-repeat: no-repeat;
+
+							cursor: pointer;
+
+							> span {
+								display: none;
+							}
+
 							&:not(.active) {
+								display: none;
+							}
+
+							&:not(:has(input:checked)) {
+								opacity: 0.75;
+							}
+
+							&:has(input:checked) {
+								filter: drop-shadow(1px 0px 0px rgb(255, 255, 255)) drop-shadow(-1px 0px 0px rgb(255, 255, 255)) drop-shadow(0px 1px 0px rgb(255, 255, 255)) drop-shadow(0px -1px 0px rgb(255, 255, 255)) drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.3));
+							}
+
+							&:has(input[name='lemming-1']),
+							&:has(input[name='lemming-2']) {
+								&:has(input[value='red']) {
+									background-image: url('/assets/lemming-red.svg');
+								}
+							}
+
+							&:has(input[name='tile']) {
+								&:has(input[data-type='hole']) {
+									background-image: url('/assets/tile-hole.svg');
+								}
+
+								&:has(input[data-type='land']) {
+									background-image: url('/assets/tile-land.svg');
+								}
+
+								&:has(input[data-type='hill']) {
+									background-image: url('/assets/tile-hill.svg');
+								}
+
+								&:has(input[data-type='water']) {
+									background-image: url('/assets/tile-water.svg');
+								}
+							}
+
+							&:has(input[name='direction']) {
+								&:has(input[value='left']) {
+									background-image: url('/assets/arrow-left.svg');
+								}
+
+								&:has(input[value='right']) {
+									background-image: url('/assets/arrow-right.svg');
+								}
+							}
+
+							input[type='radio'] {
 								display: none;
 							}
 						}
@@ -141,23 +295,47 @@
 				display: flex;
 				gap: 32px;
 
+				width: calc(150px * 3 + 32px * 2);
+				height: 200px;
+
 				> li {
 					> lm-card {
+						position: relative;
+						
+						z-index: 50;
+
 						display: block;
 
-						width: 90px;
-						height: 160px;
-
-						background: white;
-						color: black;
-
-						cursor: pointer;
+						height: 100%;
+						aspect-ratio: 3 / 4;
 
 						transition: translate 0.3s ease, scale 0.3s ease;
 
+						&:not(.active) {
+							cursor: pointer;
+						}
+
 						&:hover {
-							scale: 1.2;
-							translate: 0 -64px;
+							z-index: 51;
+							scale: 1.75;
+							translate: 0 -75px;
+						}
+
+						&.active {
+							z-index: 10001;
+							scale: 2.5;
+
+							&[n='0'] {
+								translate: -150px -320px;
+							}
+
+							&[n='1'] {
+								translate: -332px -320px;
+							}
+
+							&[n='2'] {
+								translate: -514px -320px;
+							}
 						}
 					}
 				}

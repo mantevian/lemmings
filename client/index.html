@@ -188,10 +188,7 @@
 
 			<div id="hand">
 				<form is="lm-form" event="play-card" id="menu-container">
-					<button type="button" class="close">
-						<span>close</span>
-						<lm-event on="click" event="close-menu" />
-					</button>
+					<h2>Разыгрывание карты</h2>
 
 					<input type="hidden" name="card">
 					<input type="hidden" name="n">
@@ -289,32 +286,32 @@
 
 						<fieldset>
 							<label>
-								<input type="radio" name="tile" value="1">
+								<input type="radio" name="tile" value="1" data-type="hole">
 								<span>1</span>
 							</label>
 
 							<label>
-								<input type="radio" name="tile" value="2">
+								<input type="radio" name="tile" value="2" data-type="land">
 								<span>2</span>
 							</label>
 
 							<label>
-								<input type="radio" name="tile" value="3">
+								<input type="radio" name="tile" value="3" data-type="land">
 								<span>3</span>
 							</label>
 
 							<label>
-								<input type="radio" name="tile" value="4">
+								<input type="radio" name="tile" value="4" data-type="land">
 								<span>4</span>
 							</label>
 
 							<label>
-								<input type="radio" name="tile" value="5">
+								<input type="radio" name="tile" value="5" data-type="hill">
 								<span>5</span>
 							</label>
 
 							<label>
-								<input type="radio" name="tile" value="6">
+								<input type="radio" name="tile" value="6" data-type="water">
 								<span>6</span>
 							</label>
 						</fieldset>
@@ -323,6 +320,13 @@
 					<div id="menu-confirm">
 						<fieldset>
 							<input type="submit" value="Разыграть карту">
+
+							<button type="button" class="close">
+								<span>Отмена</span>
+								<lm-event on="click" event="close-menu" />
+							</button>
+
+							
 						</fieldset>
 					</div>
 				</form>
@@ -335,7 +339,7 @@
 		</lm-game-scene>
 
 		<lm-error>
-			<p class="title">Ошибка</p>
+			<p class="title"></p>
 			<p class="description"></p>
 		</lm-error>
 	</lm-game>

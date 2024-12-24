@@ -15,7 +15,7 @@ export default class CardElement extends CustomElement {
 
 	attributeChangedCallback(name, oldValue, newValue) {
 		if (name == "type") {
-			this.innerHTML = newValue;
+			this.style.backgroundImage = `url('/assets/cards/${newValue}.svg')`;
 		}
 	}
 }

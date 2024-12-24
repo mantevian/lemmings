@@ -2,15 +2,13 @@ import { Game } from "../../index.js";
 import SceneElement from "../scene.js";
 
 export default class GameSceneElement extends SceneElement {
-	static observedAttributes = [];
+	static observedAttributes = ["has-hill-crashed"];
 
 	/** @type {number} */
 	timer;
 
 	/** @type {string[]} */
 	hand = [];
-
-	hasHillCrashed = false;
 
 	/** @type {string[]} */
 	lemmings = [];
@@ -68,7 +66,7 @@ export default class GameSceneElement extends SceneElement {
 				el.setAttribute("pos", lemming.pos);
 			}
 
-			let turnStarted = new Date(data.game.current_turn_started).valueOf();
+			let turnStarted = new Date(data.game.current_turn_started + "Z").valueOf();
 			let turnDuration = parseInt(data.game.turn_duration) * 1000;
 			let now = new Date().valueOf();
 			let timerP = this.querySelector("#timer > p");
@@ -83,12 +81,27 @@ export default class GameSceneElement extends SceneElement {
 
 			this.lemmings = data.lemmings;
 
-			this.hasHillCrashed = data.game.has_hill_crashed;
+			this.setAttribute("has-hill-crashed", data.game.has_hill_crashed);
+			if (this.getAttribute("has-hill-crashed") == "true" && !this.hasAttribute("hill-crash-finished")) {
+				let hill = this.querySelector("li[data-type='hill']");
+				hill.classList.add("crashing");
+				setTimeout(() => {
+					hill.style.display = "none";
+				}, 2000);
+
+				let water = this.querySelector("li[data-type='water']");
+				water.setAttribute("data-n", "5");
+
+				this.setAttribute("hill-crash-finished", "true");
+			}
 		});
 
 		Game.on("card-clicked", e => {
 			let type = e.detail.type;
 			let n = e.detail.n;
+
+			let card = this.querySelector(`lm-card[n='${n}']`);
+			card.classList.add("active");
 
 			/** @type {HTMLFormElement} */
 			let form = this.querySelector("#menu-container");
@@ -101,6 +114,8 @@ export default class GameSceneElement extends SceneElement {
 
 			let menus = [];
 			let allowedTiles = [];
+
+			let hasHillCrashed = Game.getAttribute("has-hill-crashed") == "true";
 
 			switch (type) {
 				case "move_red":
@@ -117,7 +132,7 @@ export default class GameSceneElement extends SceneElement {
 					menus.push(menuTile);
 
 					allowedTiles = [2, 3, 4];
-					if (!this.hasHillCrashed) {
+					if (this.getAttribute("has-hill-crashed") != "true") {
 						allowedTiles.push(5);
 					}
 					break;
@@ -127,9 +142,9 @@ export default class GameSceneElement extends SceneElement {
 					menus.push(menuLemming2);
 					menus.push(menuTile);
 
-					allowedTiles = [1, 2, 3, 4, 5];
-					if (!this.hasHillCrashed) {
-						allowedTiles.push(6);
+					allowedTiles = [1, 2, 3, 4];
+					if (this.getAttribute("has-hill-crashed") != "true") {
+						allowedTiles.push(5);
 					}
 					break;
 
@@ -174,8 +189,30 @@ export default class GameSceneElement extends SceneElement {
 				}
 			});
 
-			this.querySelector("#menu-direction label:has(input[value='left']").classList.add("active");
-			this.querySelector("#menu-direction label:has(input[value='right']").classList.add("active");
+			if (n != 1) {
+				this.querySelector("#menu-direction label:has(input[value='left']").classList.add("active");
+			}
+
+			if (hasHillCrashed) {
+				if (n == 5) {
+					this.querySelector("#menu-direction label:has(input[value='right']").classList.remove("active");
+				} else {
+					this.querySelector("#menu-direction label:has(input[value='right']").classList.add("active");
+				}
+			} else {
+				if (n == 6) {
+					this.querySelector("#menu-direction label:has(input[value='right']").classList.remove("active");
+				} else {
+					this.querySelector("#menu-direction label:has(input[value='right']").classList.add("active");
+				}
+			}
+
+			if (hasHillCrashed) {
+				this.querySelector("input[name='tile'][value='5']").setAttribute("data-type", "water");
+			} else {
+				this.querySelector("input[name='tile'][value='5']").setAttribute("data-type", "hill");
+				this.querySelector("input[name='tile'][value='6']").setAttribute("data-type", "water");
+			}
 
 			this.querySelectorAll("#menu-container > div").forEach(menu => {
 				if (menus.includes(menu.id)) {
@@ -192,13 +229,17 @@ export default class GameSceneElement extends SceneElement {
 			this.querySelectorAll("#menu-container, #menu-container > div").forEach(e => {
 				e.classList.remove("active");
 			});
+
+			this.querySelectorAll("lm-card").forEach(e => {
+				e.classList.remove("active");
+			});
 		});
 
 		Game.on("play-card", e => {
+			Game.emit("close-menu");
+
 			let data = e.detail;
 			data.n = `${parseInt(data.n) + 1}`;
-
-			console.log(data);
 
 			switch (data.card) {
 				case "move_red":
