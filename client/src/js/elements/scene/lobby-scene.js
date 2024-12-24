@@ -61,10 +61,14 @@ export default class LobbySceneElement extends SceneElement {
 			dialog.close();
 			Game.goToScene("game");
 		});
+
+		Game.on("go-to-account", () => {
+			Game.goToScene("account");
+		});
 	}
 
 	open() {
-		let profile = this.querySelector("button.profile");
+		let profile = this.querySelector("button.profile > span");
 		profile.innerHTML = getCookie("lemmings-login");
 
 		Game.emit("ws", { event: "get-room-list" });
@@ -72,6 +76,7 @@ export default class LobbySceneElement extends SceneElement {
 		this.roomListRefreshTimer = setInterval(() => {
 			Game.emit("ws", { event: "get-room-list" });
 			Game.emit("ws", { event: "get-game-state" });
+			profile.innerHTML = getCookie("lemmings-login");
 		}, 1000);
 	}
 

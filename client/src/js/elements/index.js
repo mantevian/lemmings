@@ -5,6 +5,7 @@ import CustomFormElement from "./form";
 import GameElement from "./game";
 import LemmingElement from "./lemming";
 import SceneElement from "./scene";
+import AccountSceneElement from "./scene/account-scene";
 import GameSceneElement from "./scene/game-scene";
 import LoadingSceneElement from "./scene/loading-scene";
 import LobbySceneElement from "./scene/lobby-scene";
@@ -25,6 +26,7 @@ const elements = {
 	"lobby-scene": LobbySceneElement,
 	"loading-scene": LoadingSceneElement,
 	"game-scene": GameSceneElement,
+	"account-scene": AccountSceneElement
 };
 
 for (let e of Object.entries(elements)) {

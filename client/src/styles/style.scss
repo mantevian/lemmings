@@ -2,6 +2,7 @@
 @use './scene/lobby.scss';
 @use './scene/loading.scss';
 @use './scene/game.scss';
+@use './scene/account.scss';
 
 body {
 	display: block;
@@ -63,6 +64,10 @@ body {
 
 		> lm-game-scene {
 			@include game.scene;
+		}
+
+		> lm-account-scene {
+			@include account.scene;
 		}
 
 		> lm-error {

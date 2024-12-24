@@ -74,7 +74,10 @@
 			<div>
 				<h1>Лобби</h1>
 
-				<button class="profile"></button>
+				<button class="profile">
+					<span></span>
+					<lm-event on="click" event="go-to-account"></lm-event>
+				</button>
 
 				<div>
 					<div class="room-list">
@@ -130,6 +133,27 @@
 				</dialog>
 			</div>
 		</lm-lobby-scene>
+
+		<lm-account-scene>
+			<div>
+				<h1>Управление аккаунтом</h1>
+				
+				<button class="lobby-button">
+					<span>В лобби</span>
+					<lm-event on="click" event="go-to-lobby"></lm-event>
+				</button>
+				
+				<button id="logout-button">
+					<span>Выйти из аккаунта</span>
+					<lm-event on="click" event="logout"></lm-event>
+				</button>
+				
+				<button id="logout-everywhere-button">
+					<span>Выйти со всех устройств</span>
+					<lm-event on="click" event="logout-everywhere"></lm-event>
+				</button>
+			</div>
+		</lm-account-scene>
 
 		<lm-game-scene>
 			<h1>Лемминги</h1>

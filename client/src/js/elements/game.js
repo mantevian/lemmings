@@ -1,4 +1,4 @@
-import { getCookie } from "../index.js";
+import { deleteCookie, getCookie } from "../index.js";
 import CustomElement from "./element.js";
 
 export default class GameElement extends CustomElement {
@@ -61,11 +61,19 @@ export default class GameElement extends CustomElement {
 					break;
 
 				case "logout":
-
+					if (data.result == "ok") {
+						this.goToScene("login");
+						deleteCookie("lemmings-token");
+						deleteCookie("lemmings-login");
+					}
 					break;
 
 				case "logout-everywhere":
-
+					if (data.result == "ok") {
+						this.goToScene("login");
+						deleteCookie("lemmings-token");
+						deleteCookie("lemmings-login");
+					}
 					break;
 
 				case "get-room-list":
