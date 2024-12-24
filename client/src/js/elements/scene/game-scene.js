@@ -96,7 +96,7 @@ export default class GameSceneElement extends SceneElement {
 			});
 
 			let myLemmingP = this.querySelector("#my-lemming");
-			const COLOR = {
+			const COLOR_TRANSLATION = {
 				"red": "красный",
 				"yellow": "жёлтый",
 				"green": "зелёный",
@@ -104,8 +104,16 @@ export default class GameSceneElement extends SceneElement {
 				"purple": "фиолетовый",
 				"white": "белый"
 			};
-			myLemmingP.innerText = COLOR[data.role];
-			myLemmingP.style.color = data.role;
+			const COLOR_HEX = {
+				"red": "#ff3333",
+				"yellow": "#ffff33",
+				"green": "#33ff33",
+				"blue": "#3333ff",
+				"purple": "#ff33ff",
+				"white": "#ffffff"
+			}
+			myLemmingP.innerText = COLOR_TRANSLATION[data.role];
+			myLemmingP.style.color = COLOR_HEX[data.role];
 
 			this.lemmings = data.lemmings;
 
