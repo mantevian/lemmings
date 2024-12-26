@@ -22,6 +22,8 @@ begin
 	select json_object(
 		'result' VALUE 'ok',
 
+		'id' VALUE gid,
+
 		'is_your_turn' VALUE (select is_turn_of(gid, lgn)),
 
 		'role' VALUE plr.color,

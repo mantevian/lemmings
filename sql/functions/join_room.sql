@@ -48,6 +48,7 @@ begin
 
 	return json_object(
 		'result' VALUE 'ok',
+		'id' VALUE gid,
 		'players' VALUE (select json_agg(json_object('name' VALUE p.login)) from players p where id_game = gid),
 		'max_player_count' VALUE (select player_count from games where id_game = gid)
 	);
