@@ -77,11 +77,7 @@ export default class GameSceneElement extends SceneElement {
 				el.setAttribute("pos", lemming.pos);
 			}
 
-			let turnStarted = new Date(data.game.current_turn_started + "Z").valueOf();
-			let turnDuration = parseInt(data.game.turn_duration) * 1000;
-			let now = new Date().valueOf();
-			let timerP = this.querySelector("#timer > p");
-			timerP.innerText = Math.floor((turnStarted + turnDuration - now) / 1000);
+			this.querySelector("#timer > p").innerText = data.game.time_left;
 
 			let myTurnP = this.querySelector("#my-turn");
 			/** @type {HTMLButtonElement} */
