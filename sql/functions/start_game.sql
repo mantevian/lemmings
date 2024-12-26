@@ -1,10 +1,9 @@
-create or replace function start_game(tk varchar(255), gid integer)
+create or replace function start_game(gid integer)
 returns json
 language plpgsql
-external security definer
+external security invoker
 as $$
 declare
-	lgn varchar;
 	pl record;
 	iddeck integer;
 	player_iddeck integer;
@@ -14,21 +13,6 @@ declare
 	random_colors color[];
 begin
 	set timezone = 'UTC';
-
-	select get_login_from_token(tk) into lgn;
-	if lgn is null then
-		return json_object('result' VALUE 'user_not_found');
-	end if;
-
-	if not exists(select * from players where login = lgn and id_game = gid) then
-		return json_object('result' VALUE 'not_in_this_room');
-	end if;
-
-	select player_count from games where id_game = gid into pc;
-	select count(*) from connections where id_game = gid into current_pc;
-	if current_pc < pc then
-		return json_object('result' VALUE 'not_enough_players');
-	end if;
 
 	insert into decks default values returning id_deck into iddeck;
 

@@ -33,11 +33,17 @@ begin
 
 		select count(*) from players where id_game = gid into current_pc;
 		select player_count from games where id_game = gid into pc;
-		if current_pc >= pc then
+		if current_pc = pc then
 			return json_object('result' VALUE 'room_is_full');
 		end if;
 
 		insert into players (login, active) values (lgn, true);
+	end if;
+
+	select count(*) from players where id_game = gid into current_pc;
+	select player_count from games where id_game = gid into pc;
+	if current_pc = pc then
+		perform start_game(gid);
 	end if;
 
 	return json_object(
