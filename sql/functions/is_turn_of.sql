@@ -1,41 +1,39 @@
-create or replace function is_turn_of(tk varchar)
+create or replace function is_turn_of(gid integer, lgn varchar)
 returns bool
 language plpgsql
 external security invoker
 as $$
 declare
-	gid integer;
 	did integer;
 	player_tord integer;
 	game_tord integer;
-	lgn varchar;
 	dur integer;
-	started timestamp;
+	st timestamp;
 begin
 	set timezone = 'UTC';
 
-	select get_login_from_token(tk) into lgn;
-	if lgn is null then
-		return false;
-	end if;
+	select
+		id_deck, turn_order
+	into
+		did, player_tord
+	from players
+	where
+		id_game = gid
+	and
+		login = lgn;
 
-	if not exists (select * from connections where token = tk and id_game is not null) then
-		return false;
-	end if;
-
-	select id_game from connections where token = tk into gid;
-	select id_deck from players where token = tk into did;
-
-	select turn_order from players where token = tk into player_tord;
-	select current_turn_order from games where id_game = gid into game_tord;
-	select current_turn_started from games where id_game = gid into started;
-	select turn_duration from games where id_game = gid into dur;
+	select
+		current_turn_order, current_turn_started, turn_duration
+	into
+		game_tord, st, dur
+	from games
+	where id_game = gid;
 
 	if (player_tord is null) or (game_tord is null) then
 		return false;
 	end if;
 
-	if now() > started + (dur * interval '1 second') then
+	if now() > st + (dur * interval '1 second') then
 		perform next_turn(tk);
 	end if;
 

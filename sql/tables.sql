@@ -12,7 +12,7 @@ CREATE TABLE deck_cards (
 	card card NOT NULL,
 	pos integer NOT NULL,
 
-	FOREIGN KEY (id_deck) REFERENCES decks (id_deck)
+	FOREIGN KEY (id_deck) REFERENCES decks (id_deck) ON DELETE CASCADE
 );
 
 
@@ -44,23 +44,23 @@ CREATE TABLE connections (
     token varchar(255) NOT NULL,
     login varchar(32) NULL,
     expires timestamp NOT NULL,
-    id_game int NULL,
 
     PRIMARY KEY (token),
-    FOREIGN KEY (login) REFERENCES users (login) ON DELETE CASCADE,
-    FOREIGN KEY (id_game) REFERENCES games (id_game)
+    FOREIGN KEY (login) REFERENCES users (login) ON DELETE CASCADE
 );
 
 
 CREATE TABLE players (
-    token varchar(255),
-    color color NOT NULL,
-    turn_order integer NOT NULL,
-    tile integer NOT NULL,
-    pos integer NOT NULL,
+    login varchar(32),
+	id_game integer NULL,
+    color color NULL,
+    turn_order integer NULL,
+    tile integer NULL,
+    pos integer NULL,
     id_deck integer NULL,
+	active boolean NOT NULL,
 
-    PRIMARY KEY (token),
-    FOREIGN KEY (token) REFERENCES connections (token) ON DELETE CASCADE,
-    FOREIGN KEY (id_deck) REFERENCES decks (id_deck)
+    UNIQUE (login, id_game),
+    FOREIGN KEY (login) REFERENCES users (login) ON DELETE CASCADE,
+    FOREIGN KEY (id_deck) REFERENCES decks (id_deck) ON DELETE CASCADE
 );

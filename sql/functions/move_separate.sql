@@ -1,36 +1,42 @@
-create or replace function move_separate(tk varchar, target_tile integer)
+create or replace function move_separate(gid integer, col color, target_tile integer)
 returns bool
 language plpgsql
 external security invoker
 as $$
 declare
-	gid integer;
+	lgn varchar;
 	current_tile integer;
 	current_pos integer;
 	target_pos integer;
 	water_tile integer;
 	target_tile_norm integer;
 begin
-	select id_game from connections where token = tk into gid;
-
-	if gid is null then
-		return false;
-	end if;
+	select login
+	from players
+	where
+		id_game = gid
+	and
+		color = col
+	into lgn;
 
 	select get_tile_count_of_game(gid) into water_tile;
 
 	select least(water_tile, greatest(1, target_tile)) into target_tile_norm;
 
-	select tile from players where token = tk into current_tile;
-	select pos from players where token = tk into current_pos;
-
+	select
+		tile, pos
+	into
+		current_tile, current_pos
+	from get_player(gid, lgn)
+	into current_tile;
+	
 	if current_tile = target_tile_norm then
 		return false;
 	end if;
 
 	select pos + 1 from players
 	where
-		token in (select token from connections where id_game = gid)
+		id_game = gid
 	and
 		tile = target_tile_norm
 	order by pos desc
@@ -38,17 +44,23 @@ begin
 	into target_pos;
 
 	update players
-	set tile = target_tile_norm, pos = coalesce(target_pos, 1)
-	where token = tk;
+	set
+		tile = target_tile_norm,
+		pos = coalesce(target_pos, 1)
+	where
+		id_game = gid
+	and
+		login = lgn;
 
 	update players
-	set pos = pos - 1
+	set
+		pos = pos - 1
 	where
-		token in (select token from connections where id_game = gid)
+		id_game = gid
 	and
 		tile = current_tile
 	and
-		pos >= current_pos;
+		pos > current_pos;
 
 	return true;
 end;

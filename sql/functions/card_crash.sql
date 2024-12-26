@@ -1,24 +1,18 @@
-create or replace function card_crash(tk varchar(255), card_pos integer)
+create or replace function card_crash(tk varchar(255), gid integer)
 returns json
 language plpgsql
 external security definer
 as $$
 declare
-	car card;
+	lgn varchar;
+	card_pos integer;
 	did integer;
 	gid integer;
 	tile_count integer;
 	count_lemmings_in_water integer;
 begin
-	if not (select is_turn_of(tk)) then
-		return json_object('result' VALUE 'cant_play_cards');
-	end if;
-
-	select id_game from connections where token = tk into gid;
-	select id_deck from players where token = tk into did;
-	select card from deck_cards where id_deck = did and pos = card_pos into car;
-	if car <> 'crash'::card then
-		return json_object('result' VALUE 'wrong_card');
+	if not (select check_card(tk, gid, 'crash')) then
+		return json_object('result' VALUE 'cant_play');
 	end if;
 
 	select get_tile_count_of_game(gid) into tile_count;
@@ -28,15 +22,17 @@ begin
 
 	select count(*) from players
 	where
-		token in (select token from connections where id_game = gid)
+		id_game = gid
 	and
 		tile = 6
 	into count_lemmings_in_water;
 
 	update players
-	set tile = 5, pos = pos + count_lemmings_in_water
+	set
+		tile = 5,
+		pos = pos + count_lemmings_in_water
 	where
-		token in (select token from connections where id_game = gid)
+		id_game = gid
 	and
 		tile = 6;
 
@@ -46,9 +42,15 @@ begin
 
 	delete from deck_cards
 	where
-		id_deck = did
+		id_deck in (select id_deck from players where id_game = gid)
 	and
-		pos = card_pos;
+		card = 'crash';
+
+	delete from deck_cards
+	where
+		id_deck = (select id_deck from games where id_game = gid)
+	and
+		card = 'crash';
 	
 	return json_object('result' VALUE 'ok');
 end;

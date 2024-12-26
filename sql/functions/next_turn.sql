@@ -1,10 +1,10 @@
-create or replace function next_turn(tk varchar(255))
+create or replace function next_turn(tk varchar(255), gid integer)
 returns json
 language plpgsql
 external security definer
 as $$
 declare
-	gid integer;
+	lgn varchar;
 	did integer;
 	game_tord integer;
 	player_tord integer;
@@ -15,7 +15,7 @@ declare
 begin
 	set timezone = 'UTC';
 
-	select id_game from connections where token = tk into gid;
+	select get_login_from_token(tk) into lgn;
 
 	if (select get_winner(gid)) is not null then
 		update games
@@ -23,8 +23,13 @@ begin
 		where id_game = gid;
 	end if;
 
-	select id_deck from players where token = tk into did;
-	select turn_order from players where token = tk into player_tord;
+	select
+		id_deck, turn_order
+	into
+		did, player_tord
+	from get_player(gid, lgn)
+	into did;
+
 	select current_turn_order from games where id_game = gid into game_tord;
 
 	if game_tord <> player_tord then
@@ -33,7 +38,7 @@ begin
 
 	select count(*) from connections where id_game = gid into pc;
 
-select (game_tord % pc + 1) into next_tord;
+	select (game_tord % pc + 1) into next_tord;
 
 	update games
 	set

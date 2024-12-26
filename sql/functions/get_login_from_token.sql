@@ -8,15 +8,11 @@ declare
 begin
 	set timezone = 'UTC';
 
-	select connections.login from connections where
-		connections.token = tk
+	select login from connections where
+		token = tk
 	and
-		connections.expires > NOW()
+		expires > NOW()
 	into lgn;
-    
-	if lgn is null then
-		return null;
-	end if;
 
 	return lgn;
 end;

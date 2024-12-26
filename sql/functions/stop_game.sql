@@ -14,16 +14,10 @@ begin
 	where id_deck = (select id_deck from games where id_game = gid);
 
 	delete from deck_cards
-	where id_deck in (select id_deck from players where token in (select token from connections where id_game = gid));
+	where id_deck in (select id_deck from players where id_game = gid);
 
 	delete from players
-	where token in (select token from connections where id_game = gid);
-
-	update connections
-	set
-		id_game = null
-	where
-		id_game = gid;
+	where id_game = gid;
 
 	delete from games
 	where id_game = gid;

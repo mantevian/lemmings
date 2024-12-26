@@ -1,14 +1,14 @@
-create or replace function quit_room(tk varchar(255))
+create or replace function quit_room(tk varchar(255), gid integer)
 returns json
 language plpgsql
 external security definer
 as $$
 declare
 	lgn varchar;
-	gid integer;
-	player_tord integer;
+	plr record;
 	game_tord integer;
 	pc integer;
+	active_count integer;
 begin
 	set timezone = 'UTC';
 
@@ -17,35 +17,31 @@ begin
 		return json_object('result' VALUE 'user_not_found');
 	end if;
 
-	if not exists (select * from connections where token = tk and id_game is not null) then
-		return json_object('result' VALUE 'not_in_room');
+	select get_player(gid, lgn) into plr;
+
+	if plr is null then
+		return json_object('result' VALUE 'not_in_this_room');
 	end if;
 
-	select id_game from connections where token = tk into gid;
+	select count(*) from players where id_game = gid into pc;
 
-	select turn_order from players where token = tk into player_tord;
-	select current_turn_order from games where id_game = gid into game_tord;
-	select count(*) from connections where id_game = gid into pc;
-
-	if (pc > 1) and (player_tord is not null) and (game_tord is not null) and (player_tord = game_tord) then
-		update games
-		set
-			current_turn_order = (current_turn_order - 1) % (pc - 1) + 1,
-			current_turn_started = now()
-		where id_game = gid;
-	end if;
-
-	delete from players where token = tk;
-
-	if player_tord is not null then
 	update players
-	set turn_order = turn_order - 1
-	where turn_order > player_tord;
-	end if;
+	set active = false
+	where
+		login = lgn
+	and
+		id_game = gid;
 
-	update connections set id_game = null where token = tk;
+	select current_turn_order from games where id_game = gid into game_tord;
 
-	if (game_tord is not null) and (select count(*) from connections where id_game = gid) = 0 then
+	select count(*) from players
+	where
+		id_game = gid
+	and
+		active = true
+	into active_count;
+
+	if (game_tord is not null) and active_count = 0 then
 		perform stop_game(gid);
 	end if;
 

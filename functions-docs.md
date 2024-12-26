@@ -286,14 +286,14 @@ returns color
 
 Возвращает цвет по названию карты.
 
-### get_token_by_color_in_game
+### get_player_by_color
 
 ```sql
-get_token_by_color_in_game (gid integer, col color)
+get_player_by_color (gid integer, col color)
 returns varchar
 ```
 
-Возвращает токен игрока с цветом col в игре gid.
+Возвращает логин игрока с цветом col в игре gid.
 
 ### card_from_hand_to_game
 

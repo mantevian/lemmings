@@ -22,29 +22,27 @@ begin
 		return json_object('result' VALUE 'room_not_found');
 	end if;
 
-	if exists (select * from connections where connections.login = lgn and connections.id_game = gid) then
-		return json_object('result' VALUE 'already_in_room');
-	end if;
+	if exists (select * from players where login = lgn and id_game = gid) then
+		update players
+		set active = true
+		where id_game = gid and login = lgn;
+	else
+		if (select current_turn_order from games where id_game = gid) is not null then
+			return json_object('result' VALUE 'this_room_is_already_playing');
+		end if;
 
-	if exists (select * from connections where connections.token = tk and connections.id_game is not null) then
-		return json_object('result' VALUE 'already_in_room');
-	end if;
+		select count(*) from players where id_game = gid into current_pc;
+		select player_count from games where id_game = gid into pc;
+		if current_pc >= pc then
+			return json_object('result' VALUE 'room_is_full');
+		end if;
 
-	if (select current_turn_order from games where id_game = gid) is not null then
-		return json_object('result' VALUE 'this_room_is_already_playing');
+		insert into players (login, active) values (lgn, true);
 	end if;
-
-	select count(*) from connections where id_game = gid into current_pc;
-	select player_count from games where id_game = gid into pc;
-	if current_pc >= pc then
-		return json_object('result' VALUE 'room_is_full');
-	end if;
-
-	update connections set id_game = gid where token = tk;
 
 	return json_object(
 		'result' VALUE 'ok',
-		'players' VALUE (select json_agg(json_object('name' VALUE c.login)) from connections c where id_game = gid),
+		'players' VALUE (select json_agg(json_object('name' VALUE p.login)) from players p where id_game = gid),
 		'max_player_count' VALUE (select player_count from games where id_game = gid)
 	);
 end;
