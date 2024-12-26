@@ -1,4 +1,4 @@
-import { deleteCookie, getCookie } from "../index.js";
+import { getCookie } from "../index.js";
 import CustomElement from "./element.js";
 
 export default class GameElement extends CustomElement {

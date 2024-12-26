@@ -27,9 +27,8 @@ begin
 		'role' VALUE plr.color,
 
 		'game' VALUE (select json_object(
-			'turn_duration' VALUE g.turn_duration,
+			'time_left' VALUE extract(epoch from (g.current_turn_started + (g.turn_duration * interval '1 second') - now())),
 			'current_turn_order' VALUE g.current_turn_order,
-			'current_turn_started' VALUE g.current_turn_started,
 			'max_player_count' VALUE g.player_count,
 			'has_hill_crashed' VALUE g.has_hill_crashed,
 			'winner' VALUE (select login from players p
