@@ -8,7 +8,7 @@ begin
 		return json_object('result' VALUE 'user_not_found');
 	end if;
 
-	update connections set login is null where token = tk;
+	update connections set login = null where token = tk;
     
 	return json_object('result' VALUE 'ok');
 end;

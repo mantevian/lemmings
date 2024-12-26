@@ -4,6 +4,7 @@ language plpgsql
 external security definer
 as $$
 declare
+	lgn varchar;
 	p integer;
 	did integer;
 	current_tile integer;

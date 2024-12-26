@@ -27,8 +27,7 @@ begin
 		id_deck, turn_order
 	into
 		did, player_tord
-	from get_player(gid, lgn)
-	into did;
+	from get_player(gid, lgn);
 
 	select current_turn_order from games where id_game = gid into game_tord;
 

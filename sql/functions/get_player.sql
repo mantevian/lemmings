@@ -3,6 +3,7 @@ returns record
 language plpgsql
 external security invoker
 as $$
+declare
 	p record;
 begin
 	select * from players

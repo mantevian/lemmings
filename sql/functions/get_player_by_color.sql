@@ -6,7 +6,7 @@ as $$
 declare
 	p record;
 begin
-	select * players
+	select * from players
 	where
 		id_game = gid
 	and

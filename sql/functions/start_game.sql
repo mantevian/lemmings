@@ -5,7 +5,7 @@ external security definer
 as $$
 declare
 	lgn varchar;
-	conn record;
+	pl record;
 	iddeck integer;
 	player_iddeck integer;
 	pc integer;

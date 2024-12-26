@@ -27,8 +27,7 @@ begin
 		tile, pos
 	into
 		current_tile, current_pos
-	from get_player(gid, lgn)
-	into current_tile;
+	from get_player(gid, lgn);
 	
 	if current_tile = target_tile_norm then
 		return false;
