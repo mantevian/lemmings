@@ -1,5 +1,5 @@
 create or replace function get_player(gid integer, lgn varchar)
-returns record
+returns players
 language plpgsql
 external security invoker
 as $$

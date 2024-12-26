@@ -69,6 +69,13 @@
 					height: 100%;
 					overflow: scroll;
 
+					&:not(:has(ul.my-rooms > li)) {
+						> h2.my-rooms-title,
+						> ul.my-rooms {
+							display: none;
+						}
+					}
+
 					> ul {
 						display: grid;
 						grid-auto-rows: 1fr;
@@ -85,14 +92,6 @@
 
 								> span.join-code {
 									font-size: 32px;
-								}
-
-								> span.player-count {
-
-								}
-
-								> span.turn-duration {
-
 								}
 							}
 						}

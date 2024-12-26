@@ -88,8 +88,11 @@
 
 				<div>
 					<div class="room-list">
+						<h2 class="my-rooms-title">Мои текущие игры</h2>
+						<ul class="my-rooms"></ul>
+
 						<h2>Доступные комнаты</h2>
-						<ul></ul>
+						<ul class="open-rooms"></ul>
 					</div>
 
 					<div class="join-room">
@@ -126,16 +129,11 @@
 
 					<p>Игроков: <span class="player-count"></span></p>
 					<ul></ul>
-					<p>Когда присоединятся все игроки, любой из вас сможет начать игру</p>
+					<p>Когда присоединятся все игроки, игра автоматически начнётся. Не пропустите!</p>
 
 					<button>
 						<span>Выйти</span>
 						<lm-event on="click" event="quit-room"></lm-event>
-					</button>
-
-					<button>
-						<span>Начать</span>
-						<lm-event on="click" event="start-game"></lm-event>
 					</button>
 				</dialog>
 			</div>

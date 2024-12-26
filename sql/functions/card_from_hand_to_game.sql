@@ -19,10 +19,10 @@ begin
 	select id_deck from get_player(gid, lgn) into did_player;
 	select id_deck from games where id_game = gid into did_game;
 
-	select card_pos
+	select pos
 	from deck_cards
 	where
-		id_deck = did
+		id_deck = did_player
 	and
 		card = c
 	limit 1

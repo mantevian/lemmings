@@ -2,7 +2,7 @@ import { Game } from "../../index.js";
 import SceneElement from "../scene.js";
 
 export default class GameSceneElement extends SceneElement {
-	static observedAttributes = ["has-hill-crashed", "hill-crash-finished"];
+	static observedAttributes = ["has-hill-crashed", "hill-crash-finished", "gid"];
 
 	/** @type {number} */
 	timer;
@@ -18,7 +18,7 @@ export default class GameSceneElement extends SceneElement {
 	connectedCallback() {
 		Game.on("game-started", () => {
 			this.tick();
-			this.timer = setInterval(this.tick, 1000);
+			this.timer = setInterval(this.tick.bind(this), 1000);
 
 			this.removeAttribute("has-hill-crashed");
 			this.removeAttribute("hill-crash-finished");
@@ -36,6 +36,8 @@ export default class GameSceneElement extends SceneElement {
 			}
 
 			let data = e.detail;
+	
+			this.setAttribute("gid", data.id);
 
 			let deckElement = this.querySelector("#deck");
 
@@ -285,7 +287,7 @@ export default class GameSceneElement extends SceneElement {
 			Game.emit("close-menu");
 
 			let data = e.detail;
-			data.n = `${parseInt(data.n) + 1}`;
+			data.gid = this.getAttribute("gid");
 
 			switch (data.card) {
 				case "move_red":
@@ -294,6 +296,8 @@ export default class GameSceneElement extends SceneElement {
 				case "move_blue":
 				case "move_purple":
 				case "move_white":
+					data["lemming-1"] = data.card.substring(5);
+
 					Game.emit("ws", {
 						event: "card-move",
 						data
@@ -346,8 +350,12 @@ export default class GameSceneElement extends SceneElement {
 		});
 
 		Game.on("next-turn", () => {
+			let gid = this.getAttribute("gid");
 			Game.emit("ws", {
-				event: "next-turn"
+				event: "next-turn",
+				data: {
+					gid
+				}
 			});
 		});
 
@@ -363,11 +371,19 @@ export default class GameSceneElement extends SceneElement {
 			Game.goToScene("lobby");
 			this.querySelector("#winner").classList.remove("active");
 		});
+
+		Game.on("quit-room", () => {
+			this.setAttribute("gid", "");
+		});
 	}
 
 	tick() {
+		let gid = this.getAttribute("gid");
 		Game.emit("ws", {
-			event: "get-game-state"
+			event: "get-game-state",
+			data: {
+				gid
+			}
 		});
 	}
 

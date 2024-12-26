@@ -2,7 +2,7 @@ import { Game, getCookie } from "../../index.js";
 import SceneElement from "../scene.js";
 
 export default class LobbySceneElement extends SceneElement {
-	static observedAttributes = [];
+	static observedAttributes = ["gid"];
 
 	/** @type {number} */
 	roomListRefreshTimer;
@@ -19,9 +19,12 @@ export default class LobbySceneElement extends SceneElement {
 
 		Game.on("open-room-dialog", e => {
 			let data = e.detail;
+			this.setAttribute("gid", data.id);
 			let dialog = this.querySelector("dialog");
-			dialog.querySelector("span.player-count").innerHTML = `${data.logins.length} / ${data["max_player_count"]}`;
-			dialog.querySelector("ul").innerHTML = data.logins.map(p => `<li>${p.name}</li>`).join("");
+			if (data.players) {
+				dialog.querySelector("span.player-count").innerHTML = `${data.players.length} / ${data["max_player_count"]}`;
+				dialog.querySelector("ul").innerHTML = data.players.map(p => `<li>${p.name}</li>`).join("");
+			}
 			dialog.showModal();
 		});
 
@@ -31,9 +34,12 @@ export default class LobbySceneElement extends SceneElement {
 			}
 
 			let data = e.detail;
+
+			this.setAttribute("gid", data.id);
+
 			let dialog = this.querySelector("dialog");
-			dialog.querySelector("span.player-count").innerHTML = `${data.logins.length} / ${data["game"]["max_player_count"]}`;
-			dialog.querySelector("ul").innerHTML = data.logins.map(p => `<li>${p}</li>`).join("");
+			dialog.querySelector("span.player-count").innerHTML = `${data.players.length} / ${data["game"]["max_player_count"]}`;
+			dialog.querySelector("ul").innerHTML = data.players.map(p => `<li>${p}</li>`).join("");
 			dialog.showModal();
 
 			if (data["game"]["current_turn_order"]) {
@@ -43,17 +49,16 @@ export default class LobbySceneElement extends SceneElement {
 
 		Game.on("quit-room", () => {
 			Game.emit("ws", {
-				event: "quit-room"
+				event: "quit-room",
+				data: {
+					gid: this.getAttribute("gid")
+				}
 			});
+
+			this.setAttribute("gid", "");
 
 			let dialog = this.querySelector("dialog");
 			dialog.close();
-		});
-
-		Game.on("start-game", () => {
-			Game.emit("ws", {
-				event: "start-game"
-			});
 		});
 
 		Game.on("game-started", () => {
@@ -76,13 +81,27 @@ export default class LobbySceneElement extends SceneElement {
 	}
 
 	open() {
-		Game.emit("ws", { event: "get-my-login" });
+		Game.emit("ws", {
+			event: "get-my-login"
+		});
 
-		Game.emit("ws", { event: "get-room-list" });
+		Game.emit("ws", {
+			event: "get-room-list"
+		});
 
 		this.roomListRefreshTimer = setInterval(() => {
-			Game.emit("ws", { event: "get-room-list" });
-			Game.emit("ws", { event: "get-game-state" });
+			Game.emit("ws", {
+				event: "get-room-list"
+			});
+
+			if (this.getAttribute("gid")) {
+				Game.emit("ws", {
+					event: "get-game-state",
+					data: {
+						gid: this.getAttribute("gid")
+					}
+				});
+			}
 		}, 1000);
 	}
 
@@ -91,9 +110,31 @@ export default class LobbySceneElement extends SceneElement {
 	}
 
 	updateList(state) {
-		let ul = this.querySelector("ul");
+		let openRooms = this.querySelector("ul.open-rooms");
 
-		ul.innerHTML = state["rooms"]?.map(room => /*html*/`
+		openRooms.innerHTML = state["open_rooms"]?.map(room => /*html*/`
+			<li>
+				<button>
+					<span class="join-code">
+						${room["join_code"]}
+					</span>
+					
+					<span class="player-count">
+						Игроков: ${room["current_player_count"]} / ${room["player_count"]}
+					</span>
+					
+					<span class="turn-duration">
+						Время хода: ${room["turn_duration"]} с
+					</span>
+
+					<lm-event on="click" event="join-room" data="${room["join_code"]}" />
+				</button>
+			</li>
+		`).join("") || "";
+
+		let myRooms = this.querySelector("ul.my-rooms");
+
+		myRooms.innerHTML = state["my_rooms"]?.map(room => /*html*/`
 			<li>
 				<button>
 					<span class="join-code">

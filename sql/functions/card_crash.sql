@@ -7,7 +7,6 @@ declare
 	lgn varchar;
 	card_pos integer;
 	did integer;
-	gid integer;
 	tile_count integer;
 	count_lemmings_in_water integer;
 begin

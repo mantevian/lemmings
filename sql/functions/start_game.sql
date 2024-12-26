@@ -67,6 +67,10 @@ begin
 	from numbered_rows
 	where players.ctid = numbered_rows.ctid;
 
+	update players
+	set tile = 1
+	where id_game = gid;
+
 	if (select color from players where id_game = gid and color = 'red') is not null then
 		insert into deck_cards (id_deck, card, pos) values (iddeck, 'move_red', 1);
 		insert into deck_cards (id_deck, card, pos) values (iddeck, 'move_red', 2);

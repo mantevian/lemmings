@@ -17,7 +17,7 @@ begin
 		return json_object('result' VALUE 'user_not_found');
 	end if;
 
-	select get_player(gid, lgn) into plr;
+	select * from get_player(gid, lgn) into plr;
 
 	if plr is null then
 		return json_object('result' VALUE 'not_in_this_room');
@@ -25,24 +25,32 @@ begin
 
 	select count(*) from players where id_game = gid into pc;
 
-	update players
-	set active = false
-	where
-		login = lgn
-	and
-		id_game = gid;
-
 	select current_turn_order from games where id_game = gid into game_tord;
 
-	select count(*) from players
-	where
-		id_game = gid
-	and
-		active = true
-	into active_count;
+	if game_tord is null then
+		delete from players
+		where
+			login = lgn
+		and
+			id_game = gid;
+	else
+		update players
+		set active = false
+		where
+			login = lgn
+		and
+			id_game = gid;
 
-	if (game_tord is not null) and active_count = 0 then
-		perform stop_game(gid);
+		select count(*) from players
+		where
+			id_game = gid
+		and
+			active = true
+		into active_count;
+
+		if active_count = 0 then
+			perform stop_game(gid);
+		end if;
 	end if;
 
 	return json_object('result' VALUE 'ok');

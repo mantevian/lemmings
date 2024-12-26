@@ -30,7 +30,10 @@ begin
 				select g.turn_duration, g.player_count, g.join_code, count(p.login) as current_player_count
 				from games g
 				left join players p on g.id_game = p.id_game
-				where g.id_game in (select id_game from players where login = lgn)
+				where
+					g.id_game in (select id_game from players where login = lgn)
+				and
+					g.current_turn_started is not null
 				group by g.id_game
 			) game
 		)

@@ -35,7 +35,7 @@ begin
 		return json_object('result' VALUE 'not_your_turn');
 	end if;
 
-	select count(*) from connections where id_game = gid into pc;
+	select count(*) from players where id_game = gid into pc;
 
 	select (game_tord % pc + 1) into next_tord;
 
@@ -49,7 +49,7 @@ begin
 	where id_deck = did
 	into c;
 
-	perform draw_cards(tk, 3 - c);
+	perform draw_cards(gid, lgn, 3 - c);
 
 	return json_object('result' VALUE 'ok');
 end;

@@ -1,5 +1,5 @@
 create or replace function get_player_by_color(gid integer, col color)
-returns record
+returns players
 language plpgsql
 external security invoker
 as $$

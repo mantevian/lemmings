@@ -16,7 +16,7 @@ begin
 
 	select id_deck from get_player(gid, lgn) into did;
 	
-	select card_pos
+	select pos
 	from deck_cards
 	where
 		id_deck = did

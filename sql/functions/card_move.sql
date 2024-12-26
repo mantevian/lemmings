@@ -10,7 +10,7 @@ declare
 	current_tile integer;
 	target_tile integer;
 	tile_count integer;
-	card_name varchar;
+	c card;
 begin
 	select get_login_from_token(tk) into lgn;
 
@@ -20,14 +20,14 @@ begin
 
 	select id_deck from get_player(gid, lgn) into did;
 
-	select color_to_card(col) into card_name;
+	select color_to_card(col) into c;
 	
-	select card_pos
+	select pos
 	from deck_cards
 	where
 		id_deck = did
 	and
-		card = card_name
+		card = c
 	limit 1
 	into p;
 
@@ -54,7 +54,7 @@ begin
 		return json_object('result' VALUE 'cant_move');
 	end if;
 
-	perform card_from_hand_to_game(tk, gid, card_name);
+	perform card_from_hand_to_game(tk, gid, c);
 
 	return json_object('result' VALUE 'ok');
 end;

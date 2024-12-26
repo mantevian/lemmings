@@ -4,13 +4,12 @@ language plpgsql
 external security invoker
 as $$
 begin
-	delete from deck_cards;
-	update connections set id_game = null;
 	delete from games;
 	delete from players;
-	delete from decks;
 	delete from users;
 	delete from connections;
+	delete from deck_cards;
+	delete from decks;
 
 	return true;
 end;

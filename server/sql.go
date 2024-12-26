@@ -114,62 +114,62 @@ func JoinRoom(joinCode string, token string) string {
 	return "join-room " + string(j)
 }
 
-func QuitRoom(token string, idGame int) string {
-	res := sqlFunction("select quit_room($1, $2)", token, idGame)
+func QuitRoom(token string, gid int) string {
+	res := sqlFunction("select quit_room($1, $2)", token, gid)
 	j, _ := json.Marshal(res)
 	return "quit-room " + string(j)
 }
 
-func GetGameState(token string, idGame int) string {
-	res := sqlFunction("select get_game_state($1, $2)", token, idGame)
+func GetGameState(token string, gid int) string {
+	res := sqlFunction("select get_game_state($1, $2)", token, gid)
 	j, _ := json.Marshal(res)
 	return "get-game-state " + string(j)
 }
 
-func NextTurn(token string, idGame int) string {
-	res := sqlFunction("select next_turn($1, $2)", token, idGame)
+func NextTurn(token string, gid int) string {
+	res := sqlFunction("select next_turn($1, $2)", token, gid)
 	j, _ := json.Marshal(res)
 	return "next-turn " + string(j)
 }
 
-func CardMove(token string, idGame int, color string, direction string) string {
-	res := sqlFunction("select card_move($1, $2, $3, $4)", token, idGame, color, direction)
+func CardMove(token string, gid int, color string, direction string) string {
+	res := sqlFunction("select card_move($1, $2, $3, $4)", token, gid, color, direction)
 	j, _ := json.Marshal(res)
 	return "card-move " + string(j)
 }
 
-func CardJump(token string, idGame int, color string, tile int) string {
-	res := sqlFunction("select card_jump($1, $2, $3, $4)", token, idGame, color, tile)
+func CardJump(token string, gid int, color string, tile int) string {
+	res := sqlFunction("select card_jump($1, $2, $3, $4)", token, gid, color, tile)
 	j, _ := json.Marshal(res)
 	return "card-jump " + string(j)
 }
 
-func CardRomeo(token string, idGame int, color1 string, color2 string, tile int) string {
-	res := sqlFunction("select card_romeo($1, $2, $3, $4, $5)", token, idGame, color1, color2, tile)
+func CardRomeo(token string, gid int, color1 string, color2 string, tile int) string {
+	res := sqlFunction("select card_romeo($1, $2, $3, $4, $5)", token, gid, color1, color2, tile)
 	j, _ := json.Marshal(res)
 	return "card-romeo " + string(j)
 }
 
-func CardWhoosh(token string, idGame int, color1 string, color2 string) string {
-	res := sqlFunction("select card_whoosh($1, $2, $3, $4)", token, idGame, color1, color2)
+func CardWhoosh(token string, gid int, color1 string, color2 string) string {
+	res := sqlFunction("select card_whoosh($1, $2, $3, $4)", token, gid, color1, color2)
 	j, _ := json.Marshal(res)
 	return "card-whoosh " + string(j)
 }
 
-func CardBack(token string, idGame int, color string) string {
-	res := sqlFunction("select card_back($1, $2, $3)", token, idGame, color)
+func CardBack(token string, gid int, color string) string {
+	res := sqlFunction("select card_back($1, $2, $3)", token, gid, color)
 	j, _ := json.Marshal(res)
 	return "card-back " + string(j)
 }
 
-func CardMagic(token string, idGame int) string {
-	res := sqlFunction("select card_magic($1, $2)", token, idGame)
+func CardMagic(token string, gid int) string {
+	res := sqlFunction("select card_magic($1, $2)", token, gid)
 	j, _ := json.Marshal(res)
 	return "card-magic " + string(j)
 }
 
-func CardCrash(token string, idGame int) string {
-	res := sqlFunction("select card_crash($1, $2)", token, idGame)
+func CardCrash(token string, gid int) string {
+	res := sqlFunction("select card_crash($1, $2)", token, gid)
 	j, _ := json.Marshal(res)
 	return "card-crash " + string(j)
 }

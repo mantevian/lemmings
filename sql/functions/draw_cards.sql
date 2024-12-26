@@ -1,4 +1,4 @@
-create or replace function draw_cards(gid varchar, lgn varchar, amount integer)
+create or replace function draw_cards(gid integer, lgn varchar, amount integer)
 returns bool
 language plpgsql
 external security invoker

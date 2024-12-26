@@ -145,34 +145,34 @@ func StartHttpServer() {
 				output = JoinRoom(ToStringOrEmpty(data["join-code"]), token)
 
 			case "quit-room":
-				output = QuitRoom(token, ToIntOrNegativeOne(data["id-game"]))
+				output = QuitRoom(token, ToIntOrNegativeOne(data["gid"]))
 
 			case "get-game-state":
-				output = GetGameState(token, ToIntOrNegativeOne(data["id-game"]))
+				output = GetGameState(token, ToIntOrNegativeOne(data["gid"]))
 
 			case "next-turn":
-				output = NextTurn(token, ToIntOrNegativeOne(data["id-game"]))
+				output = NextTurn(token, ToIntOrNegativeOne(data["gid"]))
 
 			case "card-move":
-				output = CardMove(token, ToIntOrNegativeOne(data["id-game"]), ToStringOrEmpty(data["lemming-1"]), ToStringOrEmpty(data["direction"]))
+				output = CardMove(token, ToIntOrNegativeOne(data["gid"]), ToStringOrEmpty(data["lemming-1"]), ToStringOrEmpty(data["direction"]))
 
 			case "card-jump":
-				output = CardJump(token, ToIntOrNegativeOne(data["id-game"]), ToStringOrEmpty(data["lemming-1"]), ToIntOrNegativeOne(data["tile"]))
+				output = CardJump(token, ToIntOrNegativeOne(data["gid"]), ToStringOrEmpty(data["lemming-1"]), ToIntOrNegativeOne(data["tile"]))
 
 			case "card-romeo":
-				output = CardRomeo(token, ToIntOrNegativeOne(data["id-game"]), ToStringOrEmpty(data["lemming-1"]), ToStringOrEmpty(data["lemming-2"]), ToIntOrNegativeOne(data["tile"]))
+				output = CardRomeo(token, ToIntOrNegativeOne(data["gid"]), ToStringOrEmpty(data["lemming-1"]), ToStringOrEmpty(data["lemming-2"]), ToIntOrNegativeOne(data["tile"]))
 
 			case "card-whoosh":
-				output = CardWhoosh(token, ToIntOrNegativeOne(data["id-game"]), ToStringOrEmpty(data["lemming-1"]), ToStringOrEmpty(data["lemming-2"]))
+				output = CardWhoosh(token, ToIntOrNegativeOne(data["gid"]), ToStringOrEmpty(data["lemming-1"]), ToStringOrEmpty(data["lemming-2"]))
 
 			case "card-back":
-				output = CardBack(token, ToIntOrNegativeOne(data["id-game"]), ToStringOrEmpty(data["lemming-1"]))
+				output = CardBack(token, ToIntOrNegativeOne(data["gid"]), ToStringOrEmpty(data["lemming-1"]))
 
 			case "card-magic":
-				output = CardMagic(token, ToIntOrNegativeOne(data["id-game"]))
+				output = CardMagic(token, ToIntOrNegativeOne(data["gid"]))
 
 			case "card-crash":
-				output = CardCrash(token, ToIntOrNegativeOne(data["id-game"]))
+				output = CardCrash(token, ToIntOrNegativeOne(data["gid"]))
 			}
 
 			if cmd != "get-game-state" && cmd != "get-room-list" {

@@ -7,7 +7,6 @@ declare
 	lgn varchar;
 	clr color;
 	gid integer;
-	tord integer;
 	current_pc integer;
 	pc integer;
 begin
@@ -37,13 +36,15 @@ begin
 			return json_object('result' VALUE 'room_is_full');
 		end if;
 
-		insert into players (login, active) values (lgn, true);
+		insert into players (login, id_game, active) values (lgn, gid, true);
 	end if;
 
-	select count(*) from players where id_game = gid into current_pc;
-	select player_count from games where id_game = gid into pc;
-	if current_pc = pc then
-		perform start_game(gid);
+	if (select current_turn_order from games where id_game = gid) is null then
+		select count(*) from players where id_game = gid into current_pc;
+		select player_count from games where id_game = gid into pc;
+		if current_pc = pc then
+			perform start_game(gid);
+		end if;
 	end if;
 
 	return json_object(
