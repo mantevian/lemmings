@@ -8,6 +8,7 @@ declare
 	plr record;
 	data json;
 	time_left integer;
+	current_turn_player varchar;
 begin
 	select get_login_from_token(tk) into lgn;
 	if lgn is null then
@@ -27,7 +28,12 @@ begin
 	where id_game = gid;
 
 	if time_left <= 0 then
-		perform next_turn(tk, gid);
+		perform next_turn_inner(gid);
+	end if;
+
+	select login from players where id_game = gid and turn_order = (select current_turn_order from games where id_game = gid) into current_turn_player;
+	if not exists(select * from connections where login = current_turn_player and id_game = gid) then
+		perform next_turn_inner(gid);
 	end if;
 
 	select json_object(
@@ -72,7 +78,10 @@ begin
 			where p.id_game = gid
 		),
 
-		'players' VALUE (select array_agg(p.login order by p.turn_order nulls last)
+		'players' VALUE (select json_agg(json_object(
+				'login' VALUE login,
+				'active' VALUE exists (select * from connections where id_game = gid and login = p.login)
+			) order by p.turn_order)
 			from players p
 			where p.id_game = gid
 		)

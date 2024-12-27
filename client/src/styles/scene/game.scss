@@ -397,6 +397,17 @@
 							content: '(ходит)';
 						}
 					}
+
+					&[data-active='false'] {
+						opacity: 0.5;
+
+						&::after {
+							display: inline-block;
+							margin-left: 1em;
+							
+							content: '(неактивен)';
+						}
+					}
 				}
 			}
 

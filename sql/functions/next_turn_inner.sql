@@ -1,12 +1,12 @@
-create or replace function next_turn_inner(lgn varchar, gid integer)
+create or replace function next_turn_inner(gid integer)
 returns boolean
 language plpgsql
 external security invoker
 as $$
 declare
+	lgn varchar;
 	did integer;
 	game_tord integer;
-	player_tord integer;
 	next_tord integer;
 	pc integer;
 	c integer;
@@ -20,17 +20,21 @@ begin
 		where id_game = gid;
 	end if;
 
-	select
-		id_deck, turn_order
-	into
-		did, player_tord
-	from get_player(gid, lgn);
-
 	select current_turn_order from games where id_game = gid into game_tord;
 
-	if game_tord <> player_tord then
-		return false;
-	end if;
+	select login
+	from players
+	where
+		id_game = gid
+	and
+		turn_order = game_tord
+	into lgn;
+
+	select
+		id_deck
+	into
+		did
+	from get_player(gid, lgn);
 
 	select count(*) from players where id_game = gid into pc;
 
@@ -55,7 +59,7 @@ begin
 		and
 			id_game = gid
 	) then
-		perform next_turn_inner(lgn, gid);
+		perform next_turn_inner(gid);
 	end if;
 
 	return true;

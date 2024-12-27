@@ -132,8 +132,9 @@ export default class GameSceneElement extends SceneElement {
 			let players = data.players;
 			for (let i = 0; i < players.length; i++) {
 				let p = this.querySelector(`#player-list > p[data-n="${i}"]`);
-				p.innerText = players[i];
+				p.innerText = players[i].login;
 				p.setAttribute("data-current", i == parseInt(data.game.current_turn_order) - 1);
+				p.setAttribute("data-active", players[i].active);
 			}
 
 			if (data.game.winner) {

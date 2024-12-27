@@ -23,7 +23,9 @@ begin
 		current_turn_started = now()
 	where id_game = gid;
 
-	select array(select unnest(colors) order by random()) into random_colors;
+	select array_agg(element order by random())
+	from unnest(colors) as element
+	into random_colors;
 
 	with numbered_rows as (
 		select

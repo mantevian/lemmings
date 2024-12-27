@@ -34,7 +34,7 @@ begin
 	end if;
 
 	if now() > st + (dur * interval '1 second') then
-		perform next_turn(tk);
+		perform next_turn_inner(gid);
 	end if;
 
 	if player_tord <> game_tord then

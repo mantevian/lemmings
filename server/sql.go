@@ -120,6 +120,12 @@ func QuitRoom(token string, gid int) string {
 	return "quit-room " + string(j)
 }
 
+func GoInactive(token string) string {
+	res := sqlFunction("select go_inactive($1)", token)
+	j, _ := json.Marshal(res)
+	return "go-inactive " + string(j)
+}
+
 func GetGameState(token string, gid int) string {
 	res := sqlFunction("select get_game_state($1, $2)", token, gid)
 	j, _ := json.Marshal(res)

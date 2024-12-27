@@ -39,7 +39,7 @@ export default class LobbySceneElement extends SceneElement {
 
 			let dialog = this.querySelector("dialog");
 			dialog.querySelector("span.player-count").innerHTML = `${data.players.length} / ${data["game"]["max_player_count"]}`;
-			dialog.querySelector("ul").innerHTML = data.players.map(p => `<li>${p}</li>`).join("");
+			dialog.querySelector("ul").innerHTML = data.players.map(p => `<li>${p.login}</li>`).join("");
 			dialog.showModal();
 
 			if (data["game"]["current_turn_order"]) {

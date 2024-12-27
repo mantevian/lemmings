@@ -94,6 +94,7 @@ func StartHttpServer() {
 		for {
 			messageType, message, err := conn.ReadMessage()
 			if err != nil {
+				GoInactive(token)
 				break
 			}
 

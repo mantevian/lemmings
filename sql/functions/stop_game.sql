@@ -10,6 +10,10 @@ begin
 		return false;
 	end if;
 
+	update connections
+	set id_game = null
+	where id_game = gid;
+
 	delete from deck_cards
 	where id_deck = (select id_deck from games where id_game = gid);
 
