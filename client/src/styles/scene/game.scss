@@ -32,6 +32,14 @@
 			}
 		}
 
+		#quit-button {
+			z-index: 9999999;
+
+			position: absolute;
+			top: 64px;
+			right: 64px;
+		}
+
 		#field {
 			background-image: url("/assets/water.svg");
 			background-position: center;
