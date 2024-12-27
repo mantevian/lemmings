@@ -21,11 +21,11 @@ begin
 		return json_object('result' VALUE 'room_not_found');
 	end if;
 
-	if exists (select * from players where login = lgn and id_game = gid) then
-		update players
-		set active = true
-		where id_game = gid and login = lgn;
-	else
+	update connections
+	set id_game = gid
+	where token = tk;
+
+	if not exists (select * from players where login = lgn and id_game = gid) then
 		if (select current_turn_order from games where id_game = gid) is not null then
 			return json_object('result' VALUE 'this_room_is_already_playing');
 		end if;
@@ -36,7 +36,7 @@ begin
 			return json_object('result' VALUE 'room_is_full');
 		end if;
 
-		insert into players (login, id_game, active) values (lgn, gid, true);
+		insert into players (login, id_game) values (lgn, gid);
 	end if;
 
 	if (select current_turn_order from games where id_game = gid) is null then

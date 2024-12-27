@@ -8,7 +8,6 @@ declare
 	plr record;
 	game_tord integer;
 	pc integer;
-	active_count integer;
 begin
 	set timezone = 'UTC';
 
@@ -27,6 +26,10 @@ begin
 
 	select current_turn_order from games where id_game = gid into game_tord;
 
+	update connections
+	set id_game = null
+	where token = tk;
+
 	if game_tord is null then
 		delete from players
 		where
@@ -34,21 +37,13 @@ begin
 		and
 			id_game = gid;
 	else
-		update players
-		set active = false
-		where
-			login = lgn
-		and
-			id_game = gid;
-
-		select count(*) from players
-		where
-			id_game = gid
-		and
-			active = true
-		into active_count;
-
-		if active_count = 0 then
+		if not exists(
+			select * from connections
+			where
+				login in (select login from players where id_game = gid)
+			and
+				id_game = gid
+		) then
 			perform stop_game(gid);
 		end if;
 	end if;

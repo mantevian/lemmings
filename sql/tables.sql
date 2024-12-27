@@ -45,9 +45,11 @@ CREATE TABLE connections (
 	token varchar(255) NOT NULL,
 	login varchar(32) NULL,
 	expires timestamp NOT NULL,
+	id_game integer NULL,
 
 	PRIMARY KEY (token),
-	FOREIGN KEY (login) REFERENCES users (login) ON DELETE CASCADE
+	FOREIGN KEY (login) REFERENCES users (login) ON DELETE CASCADE,
+	FOREIGN KEY (id_game) REFERENCES games (id_game)
 );
 
 	
@@ -59,7 +61,6 @@ CREATE TABLE players (
 	tile integer NULL,
 	pos integer NULL,
 	id_deck integer NULL,
-	active boolean NOT NULL,
 
 	UNIQUE (login, id_game),
 	FOREIGN KEY (login) REFERENCES users (login) ON DELETE CASCADE,
