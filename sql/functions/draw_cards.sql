@@ -8,6 +8,7 @@ declare
 	did_player integer;
 	c record;
 	p integer;
+	curr_pos integer;
 begin
 	select id_deck from games where id_game = gid into did_game;
 
@@ -30,20 +31,20 @@ begin
 	) loop
 		select coalesce(max(pos), 0) + 1 from deck_cards where id_deck = did_player into p;
 
-		insert into deck_cards (id_deck, card, pos) values (did_player, c.card, p);
+		select pos from deck_cards
+		where id_deck = did_game
+		and card = c.card
+		limit 1
+		into curr_pos;
 
-		with card_to_delete as (
-			select id_deck, card
-			from deck_cards
-			where id_deck = did_game and card = c.card
-			limit 1
-		)
-		delete from deck_cards
-		using card_to_delete
+		update deck_cards
+		set
+			id_deck = did_player,
+			pos = p
 		where
-			deck_cards.id_deck = card_to_delete.id_deck
+			id_deck = did_game
 		and
-			deck_cards.card = card_to_delete.card;
+			pos = curr_pos;
 	end loop;
 
 	return true;
